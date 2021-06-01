@@ -1,0 +1,45 @@
+@media screen and (min-width: 711px){
+    .logo-s{display: none;}
+    #nav{
+        position: fixed;
+        width: 100%;
+        font-weight: bold;
+        font-size: 16px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        background: #000000;
+    }
+    #mav ul{
+        width: 20px;
+    }
+    #nav li{
+        display: inline-block;
+        padding: 15px;
+    }
+    #nav a{
+        text-decoration: none;
+        color: #ffffff;
+    }
+    #nav a:hover{
+        border-bottom: 5px solid #ffffff;
+    }
+    .container2{
+        float: left;
+        padding-left: 3em;
+        padding-top: 20px;
+        font-size: 26px;
+    }
+    #main-menu{
+        float: right;
+        padding-right: 30px;
+    }
+    
+    .back{
+        width: 90%;
+        background-color: #ffe4e1;
+    }
+    p{
+        color: #ffffff;
+    }
+    
+    }
