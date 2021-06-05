@@ -29,4 +29,6 @@ class UserCreateokView(TemplateView):
 
     template_name = "createok.html"
 
-
+class ScombLoginView(LoginView):
+    form_class = forms.LoginForm
+    template_name = "scomblogin.html"
