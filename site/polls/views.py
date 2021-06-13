@@ -21,7 +21,7 @@ class HomeView(TemplateView):
     template_name = "home.html"
 
 class UserCreateView(CreateView):
-    form_class = UserCreationForm
+    form_class = forms.UserCreationForm
     template_name = "create.html"
     success_url = reverse_lazy("createok")
 
