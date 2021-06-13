@@ -1,0 +1,18 @@
+@media screen and (min-width: 871px){
+    .home{
+        width: 90%;
+        margin-right: auto;
+        margin-left: auto;
+        text-align: left;
+    }
+    .home p{
+        font-size:24px;
+        color: #000000;
+    }
+    .home a{
+        color: #0000ff;
+    }
+    .home a:hover{
+        color: #ff0000;
+    }
+}

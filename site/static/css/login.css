@@ -1,0 +1,26 @@
+@media screen and (min-width: 871px){
+    .login{
+        width: 90%;
+        margin-right: auto;
+        margin-left: auto;
+        text-align: left;
+    }
+    .form{
+        width: 45%;
+        padding: 30px;
+        border: 2px solid #000000;
+    }
+    .login p{
+        font-size:24px;
+        color: #000000;
+    }
+    .login a{
+        color: #0000ff;
+    }
+    .login a:hover{
+        color: #ff0000;
+    }
+    .submit{
+        text-align: right;
+    }
+}
