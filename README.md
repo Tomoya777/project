@@ -1,8 +1,6 @@
-
-[08班]内田友哉  <br>
-Djangoのスーパーアカウント並びにメールアドレス
-ユーザー名：admin8
-パスワード：kodo1b-8
-以下はgoogleアカウント
-メールアドレス：kodozyouhou1b8@gmail.com
+Djangoのスーパーアカウント並びにメールアドレス<br>
+ユーザー名：admin8<br>
+パスワード：kodo1b-8<br>
+以下はgoogleアカウント<br>
+メールアドレス：kodozyouhou1b8@gmail.com<br>
 パスワード：kodo1b-8 
