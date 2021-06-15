@@ -1,0 +1,8 @@
+    <div class="create">
+        <p>新規ユーザーの作成</p>
+        <form action="" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">作成</button>
+        </form>
+        </div>

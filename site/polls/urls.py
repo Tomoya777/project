@@ -9,4 +9,5 @@ urlpatterns = [
     path('home/',views.HomeView.as_view(), name="home"),
     path('login/create/', views.UserCreateView.as_view(),name="create"),
     path('createok/', views.UserCreateokView.as_view(),name="createok"),
+    path('home/scomblogin',views. ScombLoginView.as_view(),name="scomblogin"),
 ]
