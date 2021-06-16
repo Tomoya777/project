@@ -14,7 +14,7 @@
     <div id="nav">
         <div class="container">
             <div class="container2">
-                <a href="">芝浦課題管理システム</a>
+                <a href="http://127.0.0.1:8000/">芝浦課題管理システム</a>
             </div>
             <ul id="main-menu">
                 <br>
@@ -30,9 +30,9 @@
             <p>本サイトにログインしてください。</p>
             <form method="POST">
             {% csrf_token %}
-                <p>ユーザ名　：<input name="username"></p>
+                <p>ユーザ名　：<input name="username" required></p>
                 <br>
-                <p>パスワード：<input type="password" name="password"></p>
+                <p>パスワード：<input type="password" name="password" required></p>
                 <br>
                 <div class="submit">
                     <p><input type="submit" value=" ログイン "></p>
@@ -41,8 +41,7 @@
         </div>
         <br>
         <p>会員登録がまだの場合は<a href="{% url 'create' %}"><b>こちら</b></a>から会員登録をしてください。<br>
-            １つ前のページに<a href="javascript:history.go(-1)"><b>戻る</b></a>
-        </p>
+        <p><a href="http://127.0.0.1:8000/"><b>最初のページに戻る</b></a></p>
     </div>
 </body>
 </html>
