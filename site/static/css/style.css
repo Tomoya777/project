@@ -52,4 +52,18 @@
         color: #000000;
         text-align: left;
     }
+    .main-container{
+        overflow: hidden;
+    }
+    .sidebar{
+        float: left;
+    }
+    .maincol{
+        float: right;
+        width: 100%;
+        margin: 0 0 0 -360px;
+    }
+    .main-container{
+        margin-left: 360px;
+    }
 }
