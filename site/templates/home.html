@@ -34,27 +34,26 @@
         </div>
     </div>
     <br><br><br><br><br><br>
-    <div class="main-container">
+    <main>
         <div class="home">
-
-            <div class="sidebar">
-                {% if user.is_authenticated %}
-                <p>ようこそ{{ user.username }}さん</p>
-                <p>こちらは芝浦課題管理システムです。<br>
-                    芝浦工業大学在学中の学生を対象とした、課題を管理するためのWebアプリケーションです。<br>
-                    次にScombから課題を抽出するため、<a href="{% url 'scomblogin' %}"><b>こちら</b></a>からScombにログインしてください。<br>
-                    <!--
+            <div class="home-contents">
+                <div class="contents-explain">
+                    {% if user.is_authenticated %}
+                    <p>ようこそ{{ user.username }}さん</p>
+                    <p>こちらは芝浦課題管理システムです。<br>
+                        芝浦工業大学在学中の学生を対象とした、課題を管理するためのWebアプリケーションです。<br>
+                        次にScombから課題を抽出するため、<a href="{% url 'scomblogin' %}"><b>こちら</b></a>からScombにログインしてください。<br>
+                        <!--
                         ここに提出期限の近い課題を表示する処理が入ります．
                     -->
-                </p>
-                {% else %}
-                <p>このサイトへのセッションが切れているか、ログインが完了していません。<br>
-                    お手数ですが、<a href="{% url 'login' %}"><b>こちら</b></a>からログインを行ってください。
-                </p>
-                {% endif %}
-            </div>
-            <div class="maincol">
-                <div class="maincol-container">
+                    </p>
+                    {% else %}
+                    <p>このサイトへのセッションが切れているか、ログインが完了していません。<br>
+                        お手数ですが、<a href="{% url 'login' %}"><b>こちら</b></a>からログインを行ってください。
+                    </p>
+                    {% endif %}
+                </div>
+                <div class="contents-calender">
                     <!--
                         ここにカレンダーを表示する処理が入ります．
                         前提条件として課題は抽出済みであることを想定しています．
@@ -63,7 +62,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 </body>
 
 </html>
