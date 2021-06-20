@@ -66,4 +66,7 @@
     .main-container{
         margin-left: 360px;
     }
+    body{
+        margin: 0;
+    }
 }
