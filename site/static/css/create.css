@@ -23,4 +23,11 @@
     .submit{
         text-align: right;
     }
+    .form2{
+        width: auto;
+        padding-right: 30%;
+    }
+    .form2 p{
+        text-align: right;
+    }
 }
