@@ -39,8 +39,27 @@
             <p>こちらは芝浦課題管理システムです。<br>
                 芝浦工業大学在学中の学生を対象とした、課題を管理するためのWebアプリケーションです。<br>
                 次にScombから課題を抽出するため、<a href="{% url 'scomblogin' %}"><b>こちら</b></a>からScombにログインしてください。<br>
-            </p>
-        {% else %}
+            </p><br>
+            <p>直近の提出課題</p>
+            <table>
+                <tr>
+                    <th>科目</th>
+                    <th>課題名</th>
+                    <th>期日</th>
+                    <th>進行度</th>
+                </tr>
+            {% for item in data %}
+                <tr>
+                    <th>{{item.subject}}</th>
+                    <th>{{item.name}}</th>
+                    <th>{{item.data}}</th>
+                    <th>{{item.degree}}</th>
+                </tr>
+            {% endfor %}
+            </table>
+
+            <p><a href="{% url 'kadai' %}">課題一覧へ</a></p>
+            {% else %}
             <p>このサイトへのセッションが切れているか、ログインが完了していません。<br>
                 お手数ですが、<a href="{% url 'login' %}"><b>こちら</b></a>からログインを行ってください。
             </p>

@@ -14,27 +14,39 @@
     <div id="nav">
         <div class="container">
             <div class="container2">
-                <a href="http://127.0.0.1:8000/">芝浦課題管理システム</a>
+                <a href="{% url 'home' %}">芝浦課題管理システム</a>
             </div>
             <ul id="main-menu">
-                <br>
-                <li><a href="#">トップページ</a></li>
-                <li><a href="#">課題一覧</a></li>
-                <li><a href="{% url 'login' %}">ログイン</a></li>
+                <li><a href="{% url 'home' %}">トップページ</a></li>
+                <li><a href="{% url 'home' %}">課題一覧</a></li>
+                <li>
+                {% if user.is_authenticated %}
+                    <p>ユーザ名：{{ user.username }}さん</p>
+                    <p><a href="{% url 'logout' %}">ログアウト</a></p>
+                {% else %}
+                    <br>
+                    <p><a href="{% url 'login' %}">ログイン</a></p>
+                {% endif %}
+                </li>
             </ul>
+ 
         </div>
     </div>
     <br><br><br><br><br><br>
-    
-    <h1>芝浦課題管理システム</h1>
-    <h2>Scombにログインして課題を抽出してください。</h2><br>
-    <form method="POST">
-        {% csrf_token %}
-        <input name="username">
-        <br>
-        <input type="password" name="password">
-        <br>
-        <input type="submit" value="ログイン">
-    </form>
+    <div class="login">
+        <div class="form">
+            <p>課題を抽出するためにScombにログインしてください。</p><br>
+            <form method="POST" action="../static/script/scomblogin.py">
+            {% csrf_token %}
+                <p>ユーザ名　：<input name="username" required></p>
+                <br>
+                <p>パスワード：<input type="password" name="password" required></p>
+                <br>
+                <div class="submit">
+                    <p><input type="submit" value=" ログイン "></p>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

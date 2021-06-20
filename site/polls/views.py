@@ -7,6 +7,8 @@ from . import forms
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 
+from django.core.mail import send_mail
+
 def index_templates(request):
     return render(request, 'index.html')
 
@@ -19,6 +21,12 @@ class MyLogoutView(LoginRequiredMixin, LogoutView):
 
 class HomeView(TemplateView):
     template_name = "home.html"
+
+class kadaiView(TemplateView):
+    template_name = "kadai.html"
+
+class kadaiaddView(TemplateView):
+    template_name = "kadaiadd.html"
 
 class UserCreateView(CreateView):
     form_class = forms.UserCreationForm

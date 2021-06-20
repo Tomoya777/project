@@ -17,15 +17,27 @@
                 <a href="http://127.0.0.1:8000/">芝浦課題管理システム</a>
             </div>
             <ul id="main-menu">
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'home' %}">トップページ</a></li>
+            <li><a href="{% url 'home' %}">課題一覧</a></li>
+            <li>
+                <p>ユーザ名：{{ user.username }}さん</p>
+                <p><a href="{% url 'logout' %}">ログアウト</a></p>
+            {% else %}
                 <br>
                 <li><a href="{% url 'login' %}">ログイン</a></li>
                 <li><a href="{% url 'create' %}">アカウント作成</a></li>
+            {% endif %}
             </ul>
         </div>
     </div>
     <br><br><br><br><br><br>
 
     <div class="login">
+        {% if user.is_authenticated %}
+            <p>ログイン済みです。</p>
+            <p><a href="{% url 'home' %}">トップページに戻ります。</a></p>        
+        {% else %}
         <div class="form">
             <p>本サイトにログインしてください。</p>
             <form method="POST">
@@ -42,6 +54,12 @@
         <br>
         <p>会員登録がまだの場合は<a href="{% url 'create' %}"><b>こちら</b></a>から会員登録をしてください。<br>
         <p><a href="http://127.0.0.1:8000/"><b>最初のページに戻る</b></a></p>
+        <br><br>
+        <p>本サイトにログインする際のユーザー名、パスワードをお忘れの方は以下のメールアドレスにご連絡ください。<br>
+            その際、登録したユーザー名またはメールアドレス、学籍番号のいずれかを記載してください。<br>
+            管理者メールアドレス：<font color="#ff0000"><b>kodozyouhou1b8@gmail.com</b></font></p>
+
+        {% endif %}
     </div>
 </body>
 </html>

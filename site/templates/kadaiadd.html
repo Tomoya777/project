@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>芝浦課題管理システム</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.18.1/build/cssreset/cssreset-min.css">
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+	<link rel="stylesheet" href="{% static 'css/home.css' %}">
+</head>
+<body>
+    <div id="nav">
+        <div class="container">
+            <div class="container2">
+                <a href="{% url 'home' %}">芝浦課題管理システム</a>
+            </div>
+            <ul id="main-menu">
+                <li><a href="{% url 'home' %}">トップページ</a></li>
+                <li><a href="{% url 'home' %}">課題一覧</a></li>
+                <li>
+                {% if user.is_authenticated %}
+                    <p>ユーザ名：{{ user.username }}さん</p>
+                    <p><a href="{% url 'logout' %}">ログアウト</a></p>
+                {% else %}
+                    <br>
+                    <p><a href="{% url 'login' %}">ログイン</a></p>
+                {% endif %}
+                </li>
+            </ul>
+        </div>
+    </div>
+    <br><br><br><br><br><br>
+
+    <div class="home">
+        <div class="form">
+            <p>scomb以外で出された課題を登録する。</p>
+            <form method="POST" action="../static/script/add.py">
+            {% csrf_token %}
+                <p>科目　：<input name="subject" required></p>
+                <br>
+                <p>課題名：<input name="name" required></p>
+                <br>
+                <p>期日　：<input name="name" required></p>
+                <br>
+                <p>進行度：<input name="name" required></p>
+                <br>
+                <div class="submit">
+                    <p><input type="submit" value=" 追加 "></p>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
