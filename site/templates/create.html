@@ -27,27 +27,27 @@
 
     <div class="create">
         <div class="form">
-            <p>本サイトの登録を行ってください。</p>
-            <div class="form2">
-                {% csrf_token %}
-                {% for field in form %}
-                <p>
-                    {{ field.label_tag }}
-                    {{ field }}
-                    <br><br>
-                    {% for error in field.errors %}
-                    <p style="color: red">{{ error }}</p>
+            <form method="POST">
+                <p>こちらからユーザー登録を行ってください。</p>
+                <div class="form2">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <p>
+                        {{ field.label_tag }}
+                        {{ field }}
+                        <br><br>
+                        {% for error in field.errors %}
+                        <p style="color: red">{{ error }}</p>
+                        {% endfor %}
+                    </p>
                     {% endfor %}
-                </p>
-                {% endfor %}
-            </div>
-            <div class="submit">
-                <p><input type="submit" value=" ユーザー登録 "></p>
-            </div>
-        </div>
-        <br>
-        <p><a href="http://127.0.0.1:8000/"><b>最初のページに戻る</b></a>
-        </p>
+                </div>
+                <div class="submit">
+                    <p><input type="submit" value=" ユーザー登録 "></p>
+                </div>
+                <p><a href="{% url 'login' %}">戻る</a></p>
+            </form>
+          </div>
     </div>
 </body>
 </html>

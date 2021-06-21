@@ -26,9 +26,14 @@ class UserCreateView(CreateView):
     success_url = reverse_lazy("createok")
 
 class UserCreateokView(TemplateView):
-
     template_name = "createok.html"
 
 class ScombLoginView(LoginView):
     form_class = forms.LoginForm
     template_name = "scomblogin.html"
+
+class KadaiView(TemplateView):
+    template_name = "kadai.html"
+
+class KadaiAddView(TemplateView):
+    template_name = "kadaiadd.html"
