@@ -1,4 +1,4 @@
-# C2 M1 熊谷
+# C2 M1 サイト認証主処理 熊谷
 import user_search
 
 
