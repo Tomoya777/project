@@ -59,8 +59,9 @@ def c4m1(kamoku,kadai,date,note):
         print("備考は128文字以内で入力してください")
     else:
         print("備考は128文字以内です")    
+
+   
     
-    
 
 
 
@@ -68,22 +69,10 @@ def c4m1(kamoku,kadai,date,note):
 
 
 
-uiha = "あいばういは"
-aumau = "ausaumau"
-mayuzumi = "黛kai"
 
-name = [uiha,aumau,mayuzumi]
 
-print(name)
 
-for liver in name:
-    count = 0
-    for c in liver:
-        if unicodedata.east_asian_width(c) in "FWA":
-            count += 2
-        else:
-            count += 1
-    print(count)
+
 
 print()
 print()
