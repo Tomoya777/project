@@ -9,6 +9,7 @@
 	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.18.1/build/cssreset/cssreset-min.css">
 	<link rel="stylesheet" href="{% static 'css/style.css' %}">
 	<link rel="stylesheet" href="{% static 'css/home.css' %}">
+	<link rel="stylesheet" href="{% static 'css/login.css' %}">
 </head>
 <body>
     <div id="nav">
@@ -34,42 +35,27 @@
     <br><br><br><br><br><br>
 
     <div class="home">
-        {% if user.is_authenticated %}
-            <p>ようこそ{{ user.username }}さん</p>
-            <p>こちらは芝浦課題管理システムです。<br>
-                芝浦工業大学在学中の学生を対象とした、課題を管理するためのWebアプリケーションです。<br>
-                次にScombから課題を抽出するため、<a href="{% url 'scomblogin' %}"><b>こちら</b></a>からScombにログインしてください。<br>
-            </p><br>
-            <p>直近の提出課題</p>
-            <table>
-                <tr>
-                    <th>科目</th>
-                    <th>課題名</th>
-                    <th>期日</th>
-                    <th>進行度</th>
-                </tr>
-            {% for item in data %}
-                <tr>
-                    <th>{{item.subject}}</th>
-                    <th>{{item.name}}</th>
-                    <th>{{item.data}}</th>
-                    <th>{{item.degree}}</th>
-                </tr>
-            {% endfor %}
-            </table>
-            <br>
-            <p><a href="{% url 'kadai' %}">課題一覧へ</a></p>
-            <p><a href="{% url 'kadaiadd' %}">課題を追加する</a></p>
-
-                        <!--やること 
-                ・カレンダーの追加
-                    -現在抱えている課題に応じて色を付けたいので，<input="date">では不十分?
-                ・期限の近い課題を表示
-                ・「課題一覧はこちら」の追加
-            -->
-            
-        
-            {% else %}
+        <div class="form">
+            {% if user.is_authenticated%}
+            <p>Scomb以外で出された課題を入力して下さい。</p>
+            <form method="POST" action="../static/script/kadaiadd.py">
+                {% csrf_token %}
+                <p>科目名　：<input name="subject" required></p>
+                <br>
+                <p>課題名　：<input name="" required></p>
+                <br>
+                <p>期日　　：<input name="deadline" required></p>
+                <br>
+                <p>進捗度　：<input name="progress" required></p>
+                <br>
+                <div class="submit">
+                    <p><input type="submit" value=" 課題を追加する "></p>
+                </div>
+            </form>
+        </div>
+        <br>
+        <p><a href="{% url 'home' %}">トップページへ戻る</a></p>
+        {% else %}
             <p>このサイトへのセッションが切れているか、ログインが完了していません。<br>
                 お手数ですが、<a href="{% url 'login' %}"><b>こちら</b></a>からログインを行ってください。
             </p>

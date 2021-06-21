@@ -14,19 +14,19 @@
     <div id="nav">
         <div class="container">
             <div class="container2">
-                <a href="#">芝浦課題管理システム</a>
+                <a href="http://127.0.0.1:8000/">芝浦課題管理システム</a>
             </div>
             <ul id="main-menu">
                 <br>
-                <li><a href="#">トップページ</a></li>
-                <li><a href="#">課題一覧</a></li>
                 <li><a href="{% url 'login' %}">ログイン</a></li>
+                <li><a href="{% url 'create' %}">アカウント作成</a></li>
             </ul>
         </div>
     </div>
     <br><br><br><br><br><br>
-    
-    <h1>アカウントが作成出来ました。</h1>
-    <a href="../../login/"><font color="#00f">こちらからログインしてください。</font></a>
+    <div class="create">
+        <p>アカウントが作成出来ました。</p>
+        <p><a href="../../login/"><font color="#00f">こちらからログインしてください。</font></a></p>
+    </div>
 </body>
 </html>

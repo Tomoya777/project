@@ -14,3 +14,11 @@ class LoginForm(auth_forms.AuthenticationForm):
         for field in self.fields.values():
             field.widget.attrs['placeholder'] = field.label
 
+class UserCreationForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ('username','email','password1','password2',)
+        labels={
+            'username':'ユーザー名',
+            'email':'メールアドレス',
+        }
