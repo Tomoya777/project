@@ -52,4 +52,18 @@
         color: #000000;
         text-align: left;
     }
+    .home-contents{
+        overflow: hidden;
+    }
+    .contents-explain{
+        float: left;
+        margin-right: 20px;
+        padding: 20px;
+        width: 300px;
+    }
+    .contents-calender{
+        float: left;
+        padding: 20px;
+        width: 300px;
+    }
 }
