@@ -12,4 +12,8 @@ urlpatterns = [
     path('login/create/', views.UserCreateView.as_view(),name="create"),
     path('createok/', views.UserCreateokView.as_view(),name="createok"),
     path('home/scomblogin',views. ScombLoginView.as_view(),name="scomblogin"),
+    path('mycalendar/', views.MyCalendar.as_view(), name='mycalendar'),
+    path(
+        'mycalendar/<int:year>/<int:month>/<int:day>/', views.MyCalendar.as_view(), name='mycalendar'
+    ),
 ]
