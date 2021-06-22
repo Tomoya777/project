@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>芝浦課題管理システム</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.18.1/build/cssreset/cssreset-min.css">
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+	<link rel="stylesheet" href="{% static 'css/home.css' %}">
+</head>
+<body>
+    <div id="nav">
+        <div class="container">
+            <div class="container2">
+                <a href="{% url 'home' %}">芝浦課題管理システム</a>
+            </div>
+            <ul id="main-menu">
+                <li><a href="{% url 'home' %}">トップページ</a></li>
+                <li><a href="{% url 'home' %}">課題一覧</a></li>
+                <li>
+                {% if user.is_authenticated %}
+                    <p>ユーザ名：{{ user.username }}さん</p>
+                    <p><a href="{% url 'logout' %}">ログアウト</a></p>
+                {% else %}
+                    <br>
+                    <p><a href="{% url 'login' %}">ログイン</a></p>
+                {% endif %}
+                </li>
+            </ul>
+        </div>
+    </div>
+    <br><br><br><br><br><br>
+
+    <div class="home">
+        {% if user.is_authenticated %}
+        <p>提出課題一覧</p>
+        <table>
+            <tr>
+                <th>科目</th>
+                <th>課題名</th>
+                <th>期日</th>
+                <th>進行度</th>
+            </tr>
+            {% for item in data %}
+            <tr>
+                <th>{{item.subject}}</th>
+                <th>{{item.name}}</th>
+                <th>{{item.deadline}}</th>
+                <th>{{item.progress}}</th>
+            </tr>
+            {% endfor %}
+        </table>
+        <br>
+        <p><a href="{% url 'kadaiadd' %}">課題を追加する</a></p>
+                        <!--やること 
+                ・カレンダーの追加
+                    -現在抱えている課題に応じて色を付けたいので，<input="date">では不十分?
+                ・期限の近い課題を表示
+            -->
+            
+        
+        {% else %}
+        <p>このサイトへのセッションが切れているか、ログインが完了していません。<br>
+            お手数ですが、<a href="{% url 'login' %}"><b>こちら</b></a>からログインを行ってください。
+        </p>
+        {% endif %}
+    </div>
+</body>
+</html>
