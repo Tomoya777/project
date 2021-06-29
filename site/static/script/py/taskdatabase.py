@@ -43,6 +43,7 @@ def taskdata_gate(task_array):
         cur.execute('INSERT OR REPLACE INTO taskdata VALUES(?,?,?,?,?,?,?,?,?)', [
             task_array[0], task_array[1], task_array[2], task_array[3], task_array[4], task_array[5], task_array[6], task_array[7], task_array[8]])
         conn.commit()  # データベース更新
+        cur.close()  # カーソルクローズ
         conn.close()  # データベース接続終了
         return 0  # 返り値が0で処理正常
 
@@ -55,17 +56,21 @@ def taskdata_gate(task_array):
 def taskdata_ask(user_id):
     conn = sqlite3.connect(dbname)
     cur = conn.cursor()
-    try:
-        cur.execute('SELECT * FROM taskdata WHERE user_id = ?', user_id)
-        tmp = cur.fetchall()
-        print(tmp)
-        conn.commit()  # データベース更新
+    cur.execute('SELECT * FROM taskdata WHERE user_id = ?', [user_id])
+    result = cur.fetchall()
+    if len(result) == 0:  # fetchallでfetchしてきたデータの数が0であればエラー
+        print("error")
+        cur.close()  # カーソルクローズ
         conn.close()  # データベース接続終了
-        return 0, tmp  # 返り値が0で処理正常
-    except sqlite3.Error as e:  # 例外処理
-        print(e)
+        return 1, result  # 返り値が0以外は失敗
+    else:  # 正常
+        cur.close()  # カーソルクローズ
+        conn.close()  # データベース接続終了
+        return 0, result  # 返り値が0で処理正常
 
 
+"""
+# 単体テスト
 date = datetime.datetime.now()
 task_id = "test"
 submit_time = date
@@ -81,5 +86,7 @@ task_array = np.zeros(0, dtype=task_datatype)
 task_array = [task_id, submit_time, user_id, task_name, subject_name,
               is_submit, can_submit_overtime, estimated_time, progless]
 
-# 単体テスト
-taskdata_ask(task_array)
+
+# taskdata_gate(task_array) #m1
+taskdata_ask(user_id)  # m2
+"""
