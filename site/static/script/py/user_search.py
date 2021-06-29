@@ -6,9 +6,9 @@ import userdata_gate
 import userdata_register
 
 
-def search_userdata(user_id):  # ログイン用
-    truth, user_id, pwd = userdata_gate.user_gate(
-        user_id)  # truth==0:失敗 それ以外:成功, C6側の関数名は仮です。
+def search_userdata(user_id, pwd):  # ログイン用
+    truth, user_id, pwd = userdata_gate.userdata_gate(
+        user_id, pwd)  # truth==0:失敗 それ以外:成功, C6側の関数名は仮です。
     return truth, user_id, pwd
 
 
