@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.18.1/build/cssreset/cssreset-min.css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
 </head>
 
 <body>
@@ -65,12 +66,6 @@
                     <p><a href="{% url 'kadai' %}">課題一覧へ</a></p>
                     <p><a href="{% url 'kadaiadd' %}">課題を追加する</a></p>
 
-                    <!--やること 
-                        ・カレンダーの追加
-                            -現在抱えている課題に応じて色を付けたいので，<input="date">では不十分?
-                        ・期限の近い課題を表示
-                        ・「課題一覧はこちら」の追加
-                    -->
                     </p>
                     {% else %}
                     <p>このサイトへのセッションが切れているか、ログインが完了していません。<br>
@@ -79,17 +74,14 @@
                     {% endif %}
                 </div>
                 <div class="contents-calender">
-                    <!--
-                        ここにカレンダーを表示する処理が入ります．
-                        前提条件として課題は抽出済みであることを想定しています．
-                    -->
-                    ここにカレンダーが入ります．
+                    <div id="caleandar"></div>
                 </div>
             </div>
         </div>
     </main>
 
-
+    <script type="text/javascript" src="{%static 'css/js/caleandar.js'%}"></script>
+    <script type="text/javascript" src="{%static 'css/js/demo.js' %}"></script>
 </body>
 
 </html>
