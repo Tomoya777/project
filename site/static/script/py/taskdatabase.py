@@ -18,7 +18,7 @@ task_datatype = [
     ("submit_url", "U256"),  # 提出url
     ("estimated_time", "int"),  # 課題の推定時間(int). scomb抽出時は-1.
     ("progress", "int"),  # 課題の完成度. scomb抽出時は-1.
-    ("remarks", "U256")]
+    ("remarks", "U256")]  # 備考欄
 dbname = "task.db"
 
 # C7M1 課題情報管理部主処理
@@ -71,6 +71,7 @@ def taskdata_ask(user_id):
         return 0, result  # 返り値が0で処理正常
 
 
+"""
 # 単体テスト
 date = datetime.datetime.now()
 task_id = "test2"
@@ -91,3 +92,4 @@ task_array = [task_id, submit_time, user_id, task_name, subject_name,
 
 taskdata_gate(task_array)  # m1
 # taskdata_ask(user_id)  # m2
+"""
