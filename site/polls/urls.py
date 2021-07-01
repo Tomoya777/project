@@ -1,6 +1,9 @@
 from django.urls import path
-
 from . import views
+
+import sys
+sys.path.append('../site/static')
+from script import scomblogin
 
 urlpatterns = [
     path('', views.index_templates, name="index_templates"),
@@ -11,5 +14,6 @@ urlpatterns = [
     path('kadaiadd/',views.KadaiAddView.as_view(), name="kadaiadd"),
     path('login/create/', views.UserCreateView.as_view(),name="create"),
     path('createok/', views.UserCreateokView.as_view(),name="createok"),
-    path('home/scomblogin',views. ScombLoginView.as_view(),name="scomblogin"),
+    path('home/scomblogin',scomblogin.ScombLoginView.as_view(),name="scomblogin"),
+    path('home/scomblogin/ajax',scomblogin.ajax,name="scomblogin_ajax"),
 ]
