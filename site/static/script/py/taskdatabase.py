@@ -16,8 +16,9 @@ task_datatype = [
     ("is_submit", "int"),  # 提出されているかどうか(1:提出済み,0:提出されていない)
     ("can_submit", "int"),  # 提出可能かどうか(1:可能,0:可能でない)
     ("submit_url", "U256"),  # 提出url
-    ("estimated_time", "int"),  # 課題の推定時間(int). scomb抽出時は0.
-    ("progress", "int")]  # 課題の完成度. scomb抽出時は0.
+    ("estimated_time", "int"),  # 課題の推定時間(int). scomb抽出時は-1.
+    ("progress", "int"),  # 課題の完成度. scomb抽出時は-1.
+    ("remarks", "U256")]
 dbname = "task.db"
 
 # C7M1 課題情報管理部主処理
@@ -37,11 +38,12 @@ def taskdata_gate(task_array):
                                      can_submit INT,\
                                      submit_url STRING,\
                                      estimated_time INT,\
-                                     progress INT)")
+                                     progress INT,\
+                                     remarks STRING )")
 
         # 一致するPRIMARY KEY(task_id)が無ければ挿入、重複していたら更新
-        cur.execute('INSERT OR REPLACE INTO taskdata VALUES(?,?,?,?,?,?,?,?,?)', [
-            task_array[0], task_array[1], task_array[2], task_array[3], task_array[4], task_array[5], task_array[6], task_array[7], task_array[8]])
+        cur.execute('INSERT OR REPLACE INTO taskdata VALUES(?,?,?,?,?,?,?,?,?,?)', [
+            task_array[0], task_array[1], task_array[2], task_array[3], task_array[4], task_array[5], task_array[6], task_array[7], task_array[8], task_array[9]])
         conn.commit()  # データベース更新
         cur.close()  # カーソルクローズ
         conn.close()  # データベース接続終了
@@ -69,24 +71,23 @@ def taskdata_ask(user_id):
         return 0, result  # 返り値が0で処理正常
 
 
-"""
 # 単体テスト
 date = datetime.datetime.now()
-task_id = "test"
+task_id = "test2"
 submit_time = date
-user_id = "testes"
+user_id = "testes2"
 task_name = "test"
 subject_name = "test"
 is_submit = "nosubmit"
 can_submit_overtime = "cannot"
 estimated_time = 1
 progless = 0
+remarks = "hello,world!"
 
 task_array = np.zeros(0, dtype=task_datatype)
 task_array = [task_id, submit_time, user_id, task_name, subject_name,
-              is_submit, can_submit_overtime, estimated_time, progless]
+              is_submit, can_submit_overtime, estimated_time, progless, remarks]
 
 
-# taskdata_gate(task_array) #m1
-taskdata_ask(user_id)  # m2
-"""
+taskdata_gate(task_array)  # m1
+# taskdata_ask(user_id)  # m2
