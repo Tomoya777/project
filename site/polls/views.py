@@ -29,8 +29,17 @@ class UserCreateokView(TemplateView):
     template_name = "createok.html"
 
 class ScombLoginView(LoginView):
-    form_class = forms.LoginForm
-    template_name = "scomblogin.html"
+    def post(self, request, *args, **kwargs):
+        context = {
+            'message': "POST method OK!!",
+        }
+        return render(request, 'scomblogin.html', context)
+
+    def get(self, request, *args, **kwargs):
+        context = {
+            'message': "Hello World! from View!!",
+        }
+        return render(request, 'scomblogin.html', context)
 
 class KadaiView(TemplateView):
     template_name = "kadai.html"
