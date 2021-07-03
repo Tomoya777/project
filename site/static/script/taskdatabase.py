@@ -1,8 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+taskdatabase.py
+V1.2 (変数の追加、初期値処理の追加)
+熊谷 直也
+2021.07.01
+C7 課題情報管理部 M1&M2 (データベース関連)
+M1: 課題をデータベースに格納&更新する。
+M2: ユーザ名に対応した課題データを返す。
+"""
 
-# C7 課題情報管理部 M1&M2
+
 import sqlite3
 import numpy as np
 import os  # ファイル存在確認
@@ -22,14 +31,15 @@ task_datatype = [
 dbname = "task.db"
 
 # C7M1 課題情報管理部主処理
-# 上位の層から上位の層から来た課題データを確認し、変更点をデータベースに格納する。一部データが欠けている際には必要なら書き入れる。
+# 上位の層から上位の層から来た課題データを確認し、変更点をデータベースに格納する。
+# 一部データが欠けている際には必要なら書き入れる。
 
 
 def taskdata_gate(task_array):
     try:
         conn = sqlite3.connect(dbname)
         cur = conn.cursor()
-        # テーブルがなければテーブル作成
+        # テーブルがなければテーブル作成(task_arrayにデータがなければ作成されません)
         cur.execute("CREATE TABLE IF NOT EXISTS taskdata(task_id STRING PRIMARY KEY, \
                                      submit_time datetime,\
                                      user_id STRING,\
@@ -40,6 +50,13 @@ def taskdata_gate(task_array):
                                      estimated_time INT,\
                                      progress INT,\
                                      remarks STRING )")
+
+        # task_array[8]→estimated_time(課題の推定時間)は値が-1で生成されるので、初期値として60を代入。
+        if task_array[7] == -1:
+            task_array[7] = 60
+            # task_array[8]→progress(課題の完成度)は値が-1で生成されるので、初期値として0を代入。
+        if task_array[8] == -1:
+            task_array[8] = 0
 
         # 一致するPRIMARY KEY(task_id)が無ければ挿入、重複していたら更新
         cur.execute('INSERT OR REPLACE INTO taskdata VALUES(?,?,?,?,?,?,?,?,?,?)', [
@@ -81,8 +98,8 @@ task_name = "test"
 subject_name = "test"
 is_submit = "nosubmit"
 can_submit_overtime = "cannot"
-estimated_time = 1
-progless = 0
+estimated_time = -1
+progless = -1
 remarks = "hello,world!"
 
 task_array = np.zeros(0, dtype=task_datatype)
