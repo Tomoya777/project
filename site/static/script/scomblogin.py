@@ -172,6 +172,6 @@ def ajax(request):
     return HttpResponse("error")
   else:
       task_array = Scombkadai(driver, request.POST.get("username"))
-      taskdata_gate(task_array)
+      #taskdata_gate(task_array)
   print(task_array)
   return HttpResponse("ok")

@@ -45,4 +45,4 @@ class KadaiView(TemplateView):
     template_name = "kadai.html"
 
 class KadaiAddView(TemplateView):
-    template_name = "kadaiadd.html"
+    template_name = "kadaiAdd.html"
