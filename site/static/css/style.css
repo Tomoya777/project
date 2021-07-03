@@ -1,4 +1,5 @@
 @media screen and (min-width: 871px){
+    /*PC用の制御*/
     .logo-s{display: none;}/*スマートフォン用ヘッダーを削除*/
     .nav{
         position: fixed;
@@ -52,18 +53,46 @@
         color: #000000;
         text-align: left;
     }
-    .home-contents{
-        overflow: hidden;
-    }
-    .contents-explain{
-        float: left;
-        width: 50%;
-    }
-    .contents-calender{
-        float: right;
-        width: 40%;
-    }
+    
+}
+.home-contents{
+    overflow: hidden;
+}
+.contents-explain{
+    float: left;
+    width: 50%;
+}
+.contents-calender{
+    float: right;
+    width: 40%;
 }
 @media screen and (max-width: 870px){
-
+    /*スマホ用の制御*/
+    body{
+        margin:0;
+    }
+    .nav{
+        border-top:8px solid #ffffff;
+        background: #585858;
+    }
+    .nav ul{
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    .nav li{
+        border-bottom: 1px solid #ffffff;
+    }
+    .nav li a{
+        display: block;
+        width: 100%;
+        padding: 20px 0;
+        text-decoration: none;
+        text-align: center;
+        font-size: 14px;
+        color: #ffffff;
+    }
+    .nav li a:hover{
+        background: #634646;
+    }
 }
