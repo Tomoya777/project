@@ -12,12 +12,11 @@
     <script type="text/javascript" src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'js/jquery.bpopup.min.js' %}"></script>
-    <!–– スタイルが崩れるのでコメントアウト　
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">  
     
 </head>
 <body>
-    <div id="nav">
+    <div class="nav">
         <div class="container">
             <div class="container2">
                 <a href="{% url 'home' %}">芝浦課題管理システム</a>
@@ -93,7 +92,7 @@
                 success: function(response){  // 通信成功
                     if (response == "error") {
                         $('#scorm_windowtitle').text('課題抽出失敗');
-                        $('#scorm_windowprogress').text('課題の読み込みに失敗しました。ユーザー名とパスワードを確認してください。');
+                        $('#scorm_windowprogress').text('課題の読み込みに失敗しました。     ユーザー名とパスワードを確認してください。');
                         $("#scorm_windowbuttonok").modal("show");
                     }
                     else {

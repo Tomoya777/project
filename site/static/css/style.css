@@ -1,6 +1,6 @@
 @media screen and (min-width: 871px){
     .logo-s{display: none;}/*スマートフォン用ヘッダーを削除*/
-    #nav{
+    .nav{
         position: fixed;
         width: 100%;
         font-weight: bold;
@@ -9,18 +9,18 @@
         padding-bottom: 5px;
         background: #585858;
     }
-    #mav ul{
+    .mav ul{
         width: 20px;
     }
-    #nav li{
+    .nav li{
         display: inline-block;
         padding: 15px;
     }
-    #nav a,p{
+    .nav a,p{
         text-decoration: none;
         color: #ffffff;
     }
-    #nav a:hover{
+    .nav a:hover{
         border-bottom: 5px solid #ffffff;
     }
 
@@ -57,13 +57,13 @@
     }
     .contents-explain{
         float: left;
-        margin-right: 20px;
-        padding: 20px;
-        width: 300px;
+        width: 50%;
     }
     .contents-calender{
-        float: left;
-        padding: 20px;
-        width: 300px;
+        float: right;
+        width: 40%;
     }
+}
+@media screen and (max-width: 870px){
+
 }
