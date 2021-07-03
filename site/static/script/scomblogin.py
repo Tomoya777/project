@@ -1,3 +1,13 @@
+'''
+***  File Name: scomblogin.py
+***  Version	: V2.0
+***  Designer	: 加藤健太
+***  Date     : 2021/07/03
+***  Purpose  : scombへのログイン、課題抽出
+***
+***  Revision:
+*** V1.0 : 加藤健太, 2021.07.03
+'''
 import time
 import numpy as np
 import urllib.parse
@@ -13,7 +23,7 @@ import chromedriver_binary
 from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
-
+from taskdatabase import * 
 task_datatype = [
   ("task_id" , "U32"), #課題のid. scormからの読み取り時は"idnumber+固有id"とする.
   ("submit_time", "datetime64[s]"), #提出期限
@@ -27,6 +37,7 @@ task_datatype = [
   ("progress", "int"), #課題の完成度. scorm抽出時は-1.
   ("remarks", "U256")] #備考,scorm抽出時はなし
 
+# scombにloginし,ログイン済みのdriverを返す
 def Scomblogin (USER, PASSW):
   TIME_OUT = 1.5 #タイムアウト時間
 
@@ -54,6 +65,7 @@ def Scomblogin (USER, PASSW):
 
   return driver , 1
 
+#ログインしているセッションを引き継ぎ、課題を取り出します。
 def Scombkadai (driver,siteuser):
   task_array = np.zeros(0, dtype = task_datatype)
   driver.get("https://scomb.shibaura-it.ac.jp/portal/contents/lms")
@@ -87,7 +99,7 @@ def Scombkadai (driver,siteuser):
           submit_url = count.a["href"] #課題の提出場所を保存
           task_temp["submit_url"] = submit_url #構造体に保存
           low_taskid = urllib.parse.parse_qsl(urllib.parse.urlparse(submit_url).query) #urlを分解し,含まれるパラメーターを抽出
-          task_temp["task_id"] = low_taskid[0][1] + low_taskid[1][1] #得られたパラメーターからidを生成し,保存
+          task_temp["task_id"] = siteuser + low_taskid[0][1] + low_taskid[1][1] #得られたパラメーターからidを生成し,保存
           task_temp["submit_time"] = count.find_all("td")[1].text[22:].replace("/","-").replace(" ","T") + ":00" #提出時間を読み取り保存
           task_temp["user_id"] = siteuser #user_idを保存
           task_temp["subject_name"] = correntsubjectname #科目名を保存
@@ -96,6 +108,8 @@ def Scombkadai (driver,siteuser):
             task_temp["can_submit"] = 1 #提出可能ではない
           if count.find("span", class_ ="unsubmitted") != None: #提出されていないことを確認したら
             task_temp["is_submit"] = 1 #値を代入
+          task_temp["estimated_time"] = -1
+          task_temp["progress"] = -1
           task_array = np.append(task_array, task_temp, axis=0) #配列の末尾にこのfor文の中で取得した課題を追加
       
       #テスト抽出
@@ -107,7 +121,7 @@ def Scombkadai (driver,siteuser):
           submit_url = count.a["href"] #課題の提出場所を保存
           task_temp["submit_url"] = submit_url #構造体に保存
           low_taskid = urllib.parse.parse_qsl(urllib.parse.urlparse(submit_url).query) #urlを分解し,含まれるパラメーターを抽出
-          task_temp["task_id"] = low_taskid[2][1] + low_taskid[1][1] #得られたパラメーターからidを生成し,保存
+          task_temp["task_id"] = siteuser + low_taskid[2][1] + low_taskid[1][1] #得られたパラメーターからidを生成し,保存
           task_temp["submit_time"] = count.find_all("td")[2].text.replace("/","-").replace(" ","T") + ":00" #提出時間を読み取り保存
           task_temp["user_id"] = siteuser #user_idを保存
           task_temp["subject_name"] = correntsubjectname #科目名を保存
@@ -116,6 +130,8 @@ def Scombkadai (driver,siteuser):
             task_temp["can_submit"] = 1 #提出可能ではない
           if count.find("span", class_ ="unsubmitted") != None: #提出されていないことを確認したら
             task_temp["is_submit"] = 1 #値を代入
+          task_temp["estimated_time"] = -1
+          task_temp["progress"] = -1
           task_array = np.append(task_array, task_temp, axis=0) #配列の末尾にこのfor文の中で取得した課題を追加
       
       #アンケート抽出
@@ -127,7 +143,7 @@ def Scombkadai (driver,siteuser):
           submit_url = count.a["href"] #課題の提出場所を保存
           task_temp["submit_url"] = submit_url #構造体に保存
           low_taskid = urllib.parse.parse_qsl(urllib.parse.urlparse(submit_url).query) #urlを分解し,含まれるパラメーターを抽出
-          task_temp["task_id"] = low_taskid[0][1] + low_taskid[3][1] #得られたパラメーターからidを生成し,保存
+          task_temp["task_id"] = siteuser + low_taskid[0][1] + low_taskid[3][1] #得られたパラメーターからidを生成し,保存
           task_temp["submit_time"] = count.find_all("td")[2].text.replace("/","-") + "T23:59:59" #提出時間を読み取り保存
           task_temp["user_id"] = siteuser #user_idを保存
           task_temp["subject_name"] = correntsubjectname #科目名を保存
@@ -136,6 +152,8 @@ def Scombkadai (driver,siteuser):
             task_temp["can_submit"] = 1 #提出可能ではない
           if count.find("span", class_ ="unsubmitted") != None: #提出されていないことを確認したら
             task_temp["is_submit"] = 1 #値を代入
+          task_temp["estimated_time"] = -1
+          task_temp["progress"] = -1
           task_array = np.append(task_array, task_temp, axis=0) #配列の末尾にこのfor文の中で取得した課題を追加
       
       usedsubjectname.append(correntsubjectname) #配列の末尾に今回の科目の名前を追加
@@ -154,6 +172,6 @@ def ajax(request):
     return HttpResponse("error")
   else:
       task_array = Scombkadai(driver, request.POST.get("username"))
+      taskdata_gate(task_array)
   print(task_array)
   return HttpResponse("ok")
-
