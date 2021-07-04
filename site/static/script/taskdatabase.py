@@ -28,7 +28,7 @@ task_datatype = [
     ("estimated_time", "int"),  # 課題の推定時間(int). scomb抽出時は-1.
     ("progress", "int"),  # 課題の完成度. scomb抽出時は-1.
     ("remarks", "U256")]  # 備考欄
-dbname = "task.db"
+dbname = "static/script/task.db"
 
 # C7M1 課題情報管理部主処理
 # 上位の層から上位の層から来た課題データを確認し、変更点をデータベースに格納する。
@@ -42,25 +42,22 @@ def taskdata_gate(task_array):
         # テーブルがなければテーブル作成(task_arrayにデータがなければ作成されません)
         cur.execute("CREATE TABLE IF NOT EXISTS taskdata(task_id STRING PRIMARY KEY, \
                                      submit_time datetime,\
-                                     user_id STRING,\
-                                     task_name STRING,\
-                                     is_submit INT,\
-                                     can_submit INT,\
-                                     submit_url STRING,\
-                                     estimated_time INT,\
-                                     progress INT,\
-                                     remarks STRING )")
+                                     user_id string,\
+                                     task_name string,\
+                                     is_submit int,\
+                                     can_submit int,\
+                                     submit_url string,\
+                                     estimated_time string,\
+                                     progress int,\
+                                     remarks string )")
 
         # task_array[8]→estimated_time(課題の推定時間)は値が-1で生成されるので、初期値として60を代入。
-        if task_array[7] == -1:
-            task_array[7] = 60
-            # task_array[8]→progress(課題の完成度)は値が-1で生成されるので、初期値として0を代入。
-        if task_array[8] == -1:
-            task_array[8] = 0
+
 
         # 一致するPRIMARY KEY(task_id)が無ければ挿入、重複していたら更新
         cur.execute('INSERT OR REPLACE INTO taskdata VALUES(?,?,?,?,?,?,?,?,?,?)', [
-            task_array[0], task_array[1], task_array[2], task_array[3], task_array[4], task_array[5], task_array[6], task_array[7], task_array[8], task_array[9]])
+            task_array[0], task_array[1], task_array[2], task_array[3], task_array[4], task_array[5], task_array[6], task_array[7], task_array[8], task_array[9] ])
+        
         conn.commit()  # データベース更新
         cur.close()  # カーソルクローズ
         conn.close()  # データベース接続終了
