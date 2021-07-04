@@ -70,6 +70,7 @@
     /*スマホ用の制御*/
     body{
         margin:0;
+        text-align: center;
     }
     .nav{
         border-top:8px solid #ffffff;
