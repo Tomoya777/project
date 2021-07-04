@@ -12,7 +12,7 @@
 	<link rel="stylesheet" href="{% static 'css/login.css' %}">
 </head>
 <body>
-    <div class="nav">
+    <div id="nav">
         <div class="container">
             <div class="container2">
                 <a href="{% url 'home' %}">芝浦課題管理システム</a>
@@ -38,7 +38,7 @@
         <div class="form">
             {% if user.is_authenticated%}
             <p>Scomb以外で出された課題を入力して下さい。</p>
-            <form method="POST" action="../static/script/kadaiadd.py">
+            <form method="POST" id="kadaiPost" action="ajax">
                 {% csrf_token %}
                 <p>科目名　：<input name="subject" required></p>
                 <br>
@@ -62,4 +62,38 @@
         {% endif %}
     </div>
 </body>
+    <script>
+        $('#kadaiPost').submit(function() {  //ボタンクリックを起点にしてajax
+            event.preventDefault();
+            $.ajax({
+                url:$('form#kadaiPost').attr('action'),
+                type: 'POST',
+                data:{
+                    'task_id':'',
+                    'submit_time':'test',
+                    'user_id':'{{ user.username }}',
+                    'subject_name':'sub_test',
+                    'task_name':'task_name',
+                    'is_submit':'ksksksks',
+                    'can_submit':0,
+                    'submit_url':"",
+                    'estimated_time':10,
+                    'progless':10,
+                    'remarks':'test',
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    'username': '{{ user.username }}'
+                },
+                dataType: 'text',
+                success: function(response){  // 通信成功
+                    if (response == 'ok'){
+                        alert('ok!')
+                    }else{
+                        alert(response)
+                    }
+                    //test
+                },
+            });
+            return false;
+        });
+    </script>
 </html>
