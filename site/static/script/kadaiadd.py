@@ -1,19 +1,23 @@
 #C4M1 課題情報更新
 '''
-***  File Name: kadaiAdd.py
+***  File Name: kadaiadd.py
 ***  Version	: V1.1
 ***  Designer	: 笠松悠太
 ***  Date     : 2021/07/03
 ***  Purpose  : 課題データベースに更新するデータを受け渡す
 ***
 ***  Revision:
-*** V1.0 : 笠松悠太, 2021.07.03
-*** V1.1 : 笠松悠太, 2021.07.04 
-    途中です このファイルはたぶん完成？？
+*** V1.0 : 笠松悠太, 2021.07.03 task_datatypeの型に合うようにデータを加工して挿入
+*** V1.1 : 笠松悠太, 2021.07.04 kadaiaddajaxからkadaiaddを呼び出す エラー処理
+*** V1.2 : 笠松悠太, 2021.07.09 taskdata_gateに課題情報を送る 
 '''
 import unicodedata
 import datetime
 from taskdatabase import *
+from django.contrib.auth.views import LoginView
+from django.shortcuts import redirect, render
+from django.http import HttpResponse
+from taskdatabase import * 
 
 #1つ1つの課題は以下の要素を持っている？
 task_datatype = [
@@ -29,13 +33,25 @@ task_datatype = [
     ("progress", "int"), #課題の完成度. scorm抽出時は-1.
     ("remarks", "U256")] #備考,scorm抽出時はなし
 
-def kadaiAdd(task_id, submit_time, user_id, subject_name, task_name, 
-             is_submit, can_submit, submit_url, estimated_time, progless, remarks):
+def kadaiadd(POST):
     #urlは空
     #入力にエラーがあった場合はerror_arrayにエラー内容を格納
     #この関数の終わりにerror_arrayが空なら次の処理に渡す
     #空じゃなかったらそのエラーをウィンドウに表示する(？)
     error_array = ""
+
+    #POSTで受け取ったからその要素を変数に入れていく
+    task_id         = POST.get("task_id")
+    submit_time     = POST.get("submit_time")
+    user_id         = POST.get("user_id")
+    subject_name    = POST.get("subject_name")
+    task_name       = POST.get("task_name")
+    is_submit       = POST.get("is_submit")
+    can_submit      = POST.get("can_submit")  
+    submit_url      = POST.get("submit_url")
+    estimated_time  = POST.get("estimated_time")
+    progress        = POST.get("progress")
+    remarks         = POST.get("remarks")
 
     #この配列を課題情報データベースに送る
     #引数として渡されたデータを上のtask_datetypeに合うように配列に格納していく
@@ -48,7 +64,6 @@ def kadaiAdd(task_id, submit_time, user_id, subject_name, task_name,
     #task_idがあるかどうか
     #task_idがないなら一意に生成する
     if not task_id:
-        user_id = "testtest"
         dt_now = datetime.datetime.now()
         dt_now_string =  dt_now.strftime("%Y%m%d%H%M%S")
 
@@ -58,7 +73,8 @@ def kadaiAdd(task_id, submit_time, user_id, subject_name, task_name,
 
 
     #submit_timeあとまわし
-    task_array["submit_time"] = ''
+    submit_time = submit_time + ":00"
+    task_array["submit_time"] = submit_time
     
 
     #user_idはそのまま
@@ -85,7 +101,7 @@ def kadaiAdd(task_id, submit_time, user_id, subject_name, task_name,
         error_array += "科目名は255byte以下になるように入力してください\n"
     task_array["subject_name"] = subject_name
 
-    print(task_name)
+
     #task_nameがあるかどうか
     if not task_name:
         task_name = "課題名未入力"
@@ -108,17 +124,23 @@ def kadaiAdd(task_id, submit_time, user_id, subject_name, task_name,
 
 
     
-    print(task_name)
-    is_submit = int(is_submit)
+    if is_submit == 'true':
+        is_submit = 1
+    else:
+        is_submit = 0
     if is_submit != 0 and is_submit != 1:
         error_array += "提出されているか不明(is_submitが0か1ではない)"
-    print("is_submitの値は" + str(is_submit))
-    print(type(is_submit))
     task_array["is_submit"] = is_submit
 
 
+
+
+    if can_submit == 'true':
+        can_submit = 1
+    else:
+        can_submit = 0
     if can_submit != 0 and can_submit != 1:
-        error_array += "提出されているか不明(can_submitが0か1ではない)"
+        error_array += "提出可能か不明(can_submitが0か1ではない)"
     task_array["can_submit"] = can_submit
 
 
@@ -130,7 +152,7 @@ def kadaiAdd(task_id, submit_time, user_id, subject_name, task_name,
         error_array += "課題にかかる推定時間(分)を1以上で入力してください"
     task_array["estimated_time"] = estimated_time
 
-
+    
     task_array["progress"] = progress
 
     #noteが全角半角128文字以内か
@@ -140,9 +162,9 @@ def kadaiAdd(task_id, submit_time, user_id, subject_name, task_name,
     task_array["remarks"] = remarks
 
 
+
     #エラー文が無いなら次の関数taskdata_gate()にtask_arrayを渡す
     if len(error_array) == 0:
-        #simau()
         taskdata_gate(task_array)
         #しまりがいいから0を返す
         return 0,error_array
@@ -152,15 +174,12 @@ def kadaiAdd(task_id, submit_time, user_id, subject_name, task_name,
 
 
 def kadaiaddajax(request):
-    print(request.POST.get)
-    code,error_array = kadaiAdd(request.POST.get("task_id"), request.POST.get("submit_time"), request.POST.get("user_id"), 
-                                request.POST.get("subject_name"), request.POST.get("task_name"), request.POST.get("is_submit"), 
-                                request.POST.get("can_submit"), request.POST.get("submit_url"), request.POST.get("estimated_time"), 
-                                request.POST.get("progless"), request.POST.get("remarks"))
+    code,error_array = kadaiadd(request.POST)
     if code == 0 :
         return HttpResponse("ok")
     else:
         return HttpResponse(error_array)
+
 
 
 

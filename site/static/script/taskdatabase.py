@@ -91,7 +91,10 @@ def taskdata_gate(task_array):
                 if task_array[i]['estimated_time'] == -1 and task_array[i]['progress'] == -1 and task_array[i]['remarks']:
                     task_array[i]['estimated_time'] = 60
                     task_array[i]['progress'] = 0
+                if not task_array[i]['remarks']:
                     task_array[i]['remarks'] = "null"
+                if not task_array[i]['submit_url']:
+                    task_array[i]['submit_url'] = "null"
                 cur.execute("INSERT INTO taskdata VALUES(?,?,?,?,?,?,?,?,?,?,?)", [
                     task_array[i]['task_id'],
                     dt_dt,  # task_arrayに格納したdatetimeを挿入できなかったので直接出力
@@ -167,7 +170,11 @@ def taskdata_ask(user_id_ask):  # user_idが配列になったことから競合
             result_array[i]['task_name'] = result[i, 4]
             result_array[i]['is_submit'] = result[i, 5]
             result_array[i]['can_submit'] = result[i, 6]
-            result_array[i]['submit_url'] = result[i, 7]
+            # result[i,10]→remarks(備考欄)に文字列"null"が挿入されていた場合、構造体にはnullを挿入(文字列ではないnull)
+            if result[i, 7] == "null":
+                result_array[i]['submit_url'] = ""  # 文字列null
+            else:
+                result_array[i]['submit_url'] = result[i, 7]
             result_array[i]['estimated_time'] = result[i, 8]
             result_array[i]['progress'] = result[i, 9]
 
