@@ -3,7 +3,7 @@
 
 """
 ***  File Name		: taskdatabase.py
-***  Version		: V1.4
+***  Version		: V1.5
 ***  Designer		: 熊谷 直也
 ***  Date			: 2021.07.05
 ***  Purpose       	: データベース関連
@@ -12,6 +12,7 @@
 *** V1.0 : 熊谷 直也, 2021.07.01
 *** V1.3 : 熊谷 直也, 2021.07.05 M2 二次元配列への対応と初期値の条件追加、変数格納順の変更
 *** V1.4 : 熊谷 直也, 2021.07.05 配列→構造体
+*** V1.5 : 熊谷 直也, 2021.07.05 備考欄の初期値処理の追加
 
 """
 
@@ -88,13 +89,14 @@ def taskdata_gate(task_array):
 
             # SELECT結果がNoneであればINSERT、重複していたらREPLACE
             if task_fetch == None:
-                # estimated_time(課題の推定時間)と、progress(課題の完成度)は値が-1で生成されてしまうので、それぞれ初期値として60、0を代入。
-                if task_array[i]['estimated_time'] == -1 and task_array[i]['progress'] == -1:
+                # estimated_time(課題の推定時間)と、progress(課題の完成度)、remarks()備考欄は値が-1で生成されてしまうので、それぞれ初期値として60、0、nullを代入。
+                if task_array[i]['estimated_time'] == -1 and task_array[i]['progress'] == -1 and task_array[i]['remarks']:
                     task_array[i]['estimated_time'] = 60
                     task_array[i]['progress'] = 0
+                    task_array[i]['remarks'] = "null"
                 cur.execute("INSERT INTO taskdata VALUES(?,?,?,?,?,?,?,?,?,?,?)", [
                     task_array[i]['task_id'],
-                    dt_dt,
+                    dt_dt,  # task_arrayに格納したdatetimeを挿入できなかったので直接出力
                     task_array[i]['user_id'],
                     task_array[i]['subject_name'],
                     task_array[i]['task_name'],
@@ -187,7 +189,7 @@ task_array = [task_id, submit_time, user_id,  subject_name, task_name,
               is_submit, can_submit, submit_url, estimated_time, progless, remarks]
 task_array = np.array(task_array)"""
 
-# 配列の中に構造体を入れてやり直し
+"""# 配列の中に構造体を入れてやり直し
 task_array = np.zeros(1, dtype=task_datatype)  # 1を要素とする配列をtask_datatypeの型で生成
 dt_now = datetime.datetime.now()
 date0 = np.datetime64(dt_now.strftime('%Y-%m-%dT%H:%M:%S'))
@@ -207,4 +209,4 @@ user_id_ask = "admin8"
 
 
 # taskdata_gate(task_array)  # m1
-taskdata_ask(user_id_ask)  # m2
+taskdata_ask(user_id_ask)  # m2"""
