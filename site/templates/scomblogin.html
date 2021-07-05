@@ -23,7 +23,7 @@
             </div>
             <ul id="main-menu">
                 <li><a href="{% url 'home' %}">トップページ</a></li>
-                <li><a href="{% url 'home' %}">課題一覧</a></li>
+                <li><a href="{% url 'kadai' %}">課題一覧</a></li>
                 <li>
                     {% if user.is_authenticated %}
                     <p>ユーザ名：{{ user.username }}さん</p>
@@ -79,6 +79,7 @@
             $('#scorm_windowtitle').text('しばらくお待ちください');
             $('#scorm_windowprogress').text('課題を読み込み中...');
             $("#modal01").modal("show") 
+            
             $.ajax({
                 url:$('form#scormpost').attr('action'),
                 type: 'POST',
@@ -99,6 +100,7 @@
                         $('#scorm_windowtitle').text('課題抽出完了!');
                         $('#scorm_windowprogress').text('課題の読み込みが完了しました。');
                         $("#scorm_windowbuttonok").modal("show");
+
                     }
                 },
             });
