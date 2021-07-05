@@ -7,6 +7,7 @@ from . import forms
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 
+
 def index_templates(request):
     return render(request, 'index.html')
 
@@ -42,7 +43,11 @@ class ScombLoginView(LoginView):
         return render(request, 'scomblogin.html', context)
 
 class KadaiView(TemplateView):
-    template_name = "kadai.html"
+    template_name = 'kadai.html'
+    def kadai(request):
+        context={'task':task_array2}
+        return render(request,template_name,context)
+
 
 class KadaiaddView(TemplateView):
     template_name = "kadaiadd.html"

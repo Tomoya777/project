@@ -158,12 +158,18 @@ def Scombkadai (driver,siteuser):
       
       usedsubjectname.append(correntsubjectname) #配列の末尾に今回の科目の名前を追加
   driver.close() #ドライバーを停止 
+  task_array2=task_array
+  def kadai(task):
+    task_array2={'task':'kadai'}
+    return render(request,'kadai.html',task_array2)
   return task_array
 
 class ScombLoginView(LoginView):
   def get(self, request, *args, **kwargs):
     context = {}
     return render(request, 'scomblogin.html', context)
+
+
     
 def ajax(request):
   driver, code = Scomblogin(request.POST.get("scomb_username"),request.POST.get("scomb_password"))
@@ -171,7 +177,7 @@ def ajax(request):
     driver.close() #ドライバーを停止 
     return HttpResponse("error")
   else:
-      task_array = Scombkadai(driver, request.POST.get("username"))
-      taskdata_gate(task_array)
-  print(task_array)
+    task_array = Scombkadai(driver, request.POST.get("username"))
+    taskdata_gate(task_array)
   return HttpResponse("ok")
+

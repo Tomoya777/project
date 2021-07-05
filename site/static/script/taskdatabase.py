@@ -22,6 +22,8 @@ import sqlite3
 import numpy as np
 import datetime
 
+from django.views.generic import TemplateView,CreateView 
+
 task_datatype = [
     ("task_id", "U32"),  # 課題のid. scombからの読み取り時は"idnumber+固有id"とする.
     ("submit_time", "datetime64[s]"),  # 提出期限
@@ -184,9 +186,10 @@ def taskdata_ask(user_id_ask):  # user_idが配列になったことから競合
             else:
                 result_array[i]['remarks'] = result[i, 10]
 
-        # print(result_array)
+            # print(result_array)
         cur.close()  # カーソルクローズ
         conn.close()  # データベース接続終了
+        
         return 0, result_array  # 返り値が0で処理正常 resultを構造体に
 
 
