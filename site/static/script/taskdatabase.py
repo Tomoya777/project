@@ -3,7 +3,7 @@
 
 """
 ***  File Name		: taskdatabase.py
-***  Version		: V1.5
+***  Version		: V1.6
 ***  Designer		: 熊谷 直也
 ***  Date			: 2021.07.05
 ***  Purpose       	: データベース関連
@@ -13,16 +13,14 @@
 *** V1.3 : 熊谷 直也, 2021.07.05 M2 二次元配列への対応と初期値の条件追加、変数格納順の変更
 *** V1.4 : 熊谷 直也, 2021.07.05 配列→構造体
 *** V1.5 : 熊谷 直也, 2021.07.05 備考欄の初期値処理の追加
+*** V1.6 : 熊谷 直也, 2021.07.05 taskdata_askの返り値を構造体化
 
 """
 
 
 import sqlite3
 import numpy as np
-import os  # ファイル存在確認
 import datetime
-import pandas as pd
-import struct
 
 task_datatype = [
     ("task_id", "U32"),  # 課題のid. scombからの読み取り時は"idnumber+固有id"とする.
@@ -150,21 +148,46 @@ def taskdata_ask(user_id_ask):  # user_idが配列になったことから競合
     cur.execute("SELECT * FROM taskdata WHERE user_id = ?",
                 [user_id_ask])  # user_id_askと一致するuser_idの課題データを取得
     result = cur.fetchall()  # SELECT文の結果をすべて取得
-    if result == None:  # fetchallでfetchしてきたデータがなければエラー
+    result = np.array(result)  # タプルで値を渡すためresultをndarray化
+
+    if result is None:  # fetchallでfetchしてきたデータがなければエラー
         # print("error")
         cur.close()  # カーソルクローズ
         conn.close()  # データベース接続終了
-        return 1, result  # 返り値が0以外は失敗 resultはリスト型
+        return 1, result  # 返り値が0以外は失敗 resultはndarray型
     else:  # 正常
-        # print(result)
+        nagasa = len(result)  # fetchしてきた結果の長さ(taskの個数)を取得
+        # 1を要素とする配列をtask_datatypeの型で生成
+        result_array = np.zeros(1, dtype=task_datatype)
+        for i in range(nagasa):  # resultをndarray化したためタプルで渡せる
+            result_array[i]['task_id'] = result[i, 0]
+            result_array[i]['submit_time'] = result[i, 1]
+            result_array[i]['user_id'] = result[i, 2]
+            result_array[i]['subject_name'] = result[i, 3]
+            result_array[i]['task_name'] = result[i, 4]
+            result_array[i]['is_submit'] = result[i, 5]
+            result_array[i]['can_submit'] = result[i, 6]
+            result_array[i]['submit_url'] = result[i, 7]
+            result_array[i]['estimated_time'] = result[i, 8]
+            result_array[i]['progress'] = result[i, 9]
+
+            # result[i,10]→remarks(備考欄)に文字列"null"が挿入されていた場合、構造体にはnullを挿入(文字列ではないnull)
+            if result[i, 10] == "null":
+                result_array[i]['remarks'] = ""  # 文字列null
+            else:
+                result_array[i]['remarks'] = result[i, 10]
+
+        # print(result_array)
         cur.close()  # カーソルクローズ
         conn.close()  # データベース接続終了
-        return 0, result  # 返り値が0で処理正常 resultはリスト型
+        return 0, result_array  # 返り値が0で処理正常 resultを構造体に
 
 
 # 単体テスト
 
-"""# 上位層ではnumpyのdatetime64型で時刻が生成されるため、datetime64型で生成
+"""  # 上位層ではnumpyのdatetime64型で時刻が生成されるため、datetime64型で生成
+
+
 dt_now = datetime.datetime.now()
 date0 = np.datetime64(dt_now.strftime('%Y-%m-%dT%H:%M:%S'))
 date1 = np.datetime64(dt_now.strftime('%Y-%m-%dT%H:%M:%S'))
