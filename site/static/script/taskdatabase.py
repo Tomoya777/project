@@ -3,7 +3,7 @@
 
 """
 ***  File Name		: taskdatabase.py
-***  Version		: V1.3
+***  Version		: V1.4
 ***  Designer		: 熊谷 直也
 ***  Date			: 2021.07.05
 ***  Purpose       	: データベース関連
@@ -11,7 +11,7 @@
 *** Revision :
 *** V1.0 : 熊谷 直也, 2021.07.01
 *** V1.3 : 熊谷 直也, 2021.07.05 M2 二次元配列への対応と初期値の条件追加、変数格納順の変更
-
+*** V1.4 : 熊谷 直也, 2021.07.05 配列→構造体
 
 """
 
@@ -21,6 +21,7 @@ import numpy as np
 import os  # ファイル存在確認
 import datetime
 import pandas as pd
+import struct
 
 task_datatype = [
     ("task_id", "U32"),  # 課題のid. scombからの読み取り時は"idnumber+固有id"とする.
@@ -46,9 +47,12 @@ def taskdata_gate(task_array):
         conn = sqlite3.connect(dbname)  # データベース接続
         cur = conn.cursor()
 
-        task_array = np.array(task_array)  # numpyの機能を使用するため、念の為ndarray化
-        nagasa = task_array.shape[1]  # taskの個数を取得
+        sqlite3.register_adapter(np.int64, int)  # int32 or int64をintへ
+        sqlite3.register_adapter(np.int32, int)
 
+       # task_array = np.array(task_array)  # numpyの機能を使用するため、念の為ndarray化
+        nagasa = len(task_array)  # taskの個数を取得
+        # print(nagasa)
         # テーブルがなければテーブル作成(task_arrayにデータがなければ作成されません)
         cur.execute("CREATE TABLE IF NOT EXISTS taskdata(task_id STRING PRIMARY KEY, \
                                      submit_time datetime,\
@@ -63,41 +67,68 @@ def taskdata_gate(task_array):
                                      remarks STRING )")
 
         for i in range(nagasa):  # taskごとにそれぞれ処理
-
-            # task_array[1,i]→submit_timeはnumpyのdatetime64型であるから、ndarrayのメソッドastypeでdatetime.datetime型へ変換
+            # print(task_array)
+            # submit_timeはnumpyのdatetime64型であるから、ndarrayのメソッドastypeでdatetime.datetime型へ変換
             # 参考 https://numpy.org/doc/stable/reference/generated/numpy.ndarray.astype.html
-            dt64 = task_array[1, i]
-            # print(type(dt64))
+            dt64 = task_array[i]['submit_time']
+            # print(dt64)
             dt_dt = dt64.astype(datetime.datetime)
-            # print(type(dt_dt))
-            task_array[1, i] = dt_dt
+            # print(dt_dt)
+            task_array[i]['submit_time'] = dt_dt
 
             cur.execute(
-                "SELECT * FROM taskdata WHERE task_id=?", [task_array[0, i]])  # SELECT文でデータベースにすでに入ってるタスクと、処理を行うタスクを比較
-
+                "SELECT * FROM taskdata WHERE task_id=?", [task_array[i]['task_id']])  # SELECT文でデータベースにすでに入ってるタスクと、処理を行うタスクを比較
             task_fetch = cur.fetchone()  # fetchoneでSELECT文の結果を取得(リストになっている)
+            """task_array[i]['datetime'] = struct.unpack(
+                '<q', task_array[i]['datetime'])
+            print(task_fetch[1])"""
+
+            """task_array[i]['estimated_time'] = struct.unpack(
+                '<q', task_array[i]['estimated_time'])"""
+
             # SELECT結果がNoneであればINSERT、重複していたらREPLACE
             if task_fetch == None:
-                # task_array[8,i]→estimated_time(課題の推定時間)と、task_array[9,i]→progress(課題の完成度)は値が-1で生成されてしまうので、それぞれ初期値として60、0を代入。
-                if task_array[8, i] == -1 and task_array[9, i] == -1:
-                    task_array[8, i] = 60
-                    task_array[9, i] = 0
+                # estimated_time(課題の推定時間)と、progress(課題の完成度)は値が-1で生成されてしまうので、それぞれ初期値として60、0を代入。
+                if task_array[i]['estimated_time'] == -1 and task_array[i]['progress'] == -1:
+                    task_array[i]['estimated_time'] = 60
+                    task_array[i]['progress'] = 0
                 cur.execute("INSERT INTO taskdata VALUES(?,?,?,?,?,?,?,?,?,?,?)", [
-                    task_array[0, i], task_array[1, i], task_array[2, i], task_array[3, i], task_array[4, i], task_array[5, i], task_array[6, i], task_array[7, i], task_array[8, i], task_array[9, i], task_array[10, i]])
+                    task_array[i]['task_id'],
+                    dt_dt,
+                    task_array[i]['user_id'],
+                    task_array[i]['subject_name'],
+                    task_array[i]['task_name'],
+                    task_array[i]['is_submit'],
+                    task_array[i]['can_submit'],
+                    task_array[i]['submit_url'],
+                    task_array[i]['estimated_time'],
+                    task_array[i]['progress'],
+                    task_array[i]['remarks']])
                 # print("inserted")
-            elif task_array[0, i] == task_fetch[0]:
-                # Scombからの抽出時、task_array[8,i]→estimated_time(課題の推定時間)と、task_array[9,i]→progress(課題の完成度)は値が-1であるので、その2つの変数は更新しない
-                if task_array[8, i] == -1 and task_array[9, i] == -1:
+            elif task_array[i]['task_id'] == task_fetch[0]:
+                # Scombからの抽出時、estimated_time(課題の推定時間)と、progress(課題の完成度)は値が-1であるので、その2つの変数は更新しない
+                if task_array[i]['estimated_time'] == -1 and task_array[i]['progress'] == -1:
                     # print("ちゅうしゅちゅ")
-                    task_array[8, i] = task_fetch[8]  # すでにデータベースに入っていたデータで置き換え
-                    task_array[9, i] = task_fetch[9]
-                """
-                else:
-                    print("replaced")
-                """
-                # task_arrayの[*,i]にある変数すべてが置き換えられる
+                    # すでにデータベースに入っていたデータで置き換え
+                    task_array[i]['estimated_time'] = task_fetch[8]
+                    task_array[i]['progress'] = task_fetch[9]
+
+                """else:
+                    print("replaced")"""
+
+                # task_arrayの[i]にある変数すべてが置き換えられる
                 cur.execute("REPLACE INTO taskdata VALUES(?,?,?,?,?,?,?,?,?,?,?)", [
-                    task_array[0, i], task_array[1, i], task_array[2, i], task_array[3, i], task_array[4, i], task_array[5, i], task_array[6, i], task_array[7, i], task_array[8, i], task_array[9, i], task_array[10, i]])
+                    task_array[i]['task_id'],
+                    dt_dt,
+                    task_array[i]['user_id'],
+                    task_array[i]['subject_name'],
+                    task_array[i]['task_name'],
+                    task_array[i]['is_submit'],
+                    task_array[i]['can_submit'],
+                    task_array[i]['submit_url'],
+                    task_array[i]['estimated_time'],
+                    task_array[i]['progress'],
+                    task_array[i]['remarks']])
 
         conn.commit()  # データベース更新
         cur.close()  # カーソルクローズ
@@ -130,7 +161,8 @@ def taskdata_ask(user_id_ask):  # user_idが配列になったことから競合
 
 
 # 単体テスト
-# 上位層ではnumpyのdatetime64型で時刻が生成されるため、datetime64型で生成
+
+"""# 上位層ではnumpyのdatetime64型で時刻が生成されるため、datetime64型で生成
 dt_now = datetime.datetime.now()
 date0 = np.datetime64(dt_now.strftime('%Y-%m-%dT%H:%M:%S'))
 date1 = np.datetime64(dt_now.strftime('%Y-%m-%dT%H:%M:%S'))
@@ -153,7 +185,26 @@ user_id_ask = "user_id"
 # task_array = np.zeros(0, dtype=task_datatype) #0を要素とする配列をtask_datatypeの型で生成
 task_array = [task_id, submit_time, user_id,  subject_name, task_name,
               is_submit, can_submit, submit_url, estimated_time, progless, remarks]
-task_array = np.array(task_array)
+task_array = np.array(task_array)"""
 
-taskdata_gate(task_array)  # m1
-# taskdata_ask(user_id_ask)  # m2
+# 配列の中に構造体を入れてやり直し
+task_array = np.zeros(1, dtype=task_datatype)  # 1を要素とする配列をtask_datatypeの型で生成
+dt_now = datetime.datetime.now()
+date0 = np.datetime64(dt_now.strftime('%Y-%m-%dT%H:%M:%S'))
+task_array["task_id"] = "admin8202101SU003133100132861"
+task_array["submit_time"] = date0
+task_array["user_id"] = "admin8"
+task_array["subject_name"] = "人工知能"
+task_array["task_name"] = "課題1"
+task_array["is_submit"] = 0
+task_array["can_submit"] = 0
+task_array["submit_url"] = "https://scomb.shibaura-it.ac.jp/portal/contents/lms/report_submission?idnumber=202101SU0031331001&reportId=32861"
+task_array["estimated_time"] = -1
+task_array["progress"] = -1
+task_array["remarks"] = "hello"
+
+user_id_ask = "admin8"
+
+
+# taskdata_gate(task_array)  # m1
+taskdata_ask(user_id_ask)  # m2
