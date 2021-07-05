@@ -20,6 +20,8 @@ import sqlite3
 import numpy as np
 import os  # ファイル存在確認
 import datetime
+import pandas as pd
+
 task_datatype = [
     ("task_id", "U32"),  # 課題のid. scombからの読み取り時は"idnumber+固有id"とする.
     ("submit_time", "datetime64[s]"),  # 提出期限
@@ -61,6 +63,15 @@ def taskdata_gate(task_array):
                                      remarks STRING )")
 
         for i in range(nagasa):  # taskごとにそれぞれ処理
+
+            # task_array[1,i]→submit_timeはnumpyのdatetime64型であるから、ndarrayのメソッドastypeでdatetime.datetime型へ変換
+            # 参考 https://numpy.org/doc/stable/reference/generated/numpy.ndarray.astype.html
+            dt64 = task_array[1, i]
+            # print(type(dt64))
+            dt_dt = dt64.astype(datetime.datetime)
+            # print(type(dt_dt))
+            task_array[1, i] = dt_dt
+
             cur.execute(
                 "SELECT * FROM taskdata WHERE task_id=?", [task_array[0, i]])  # SELECT文でデータベースにすでに入ってるタスクと、処理を行うタスクを比較
 
@@ -118,11 +129,12 @@ def taskdata_ask(user_id_ask):  # user_idが配列になったことから競合
         return 0, result  # 返り値が0で処理正常 resultはリスト型
 
 
-"""
 # 単体テスト
-date0 = datetime.datetime.now()
-date1 = datetime.datetime.now()
-date2 = datetime.datetime.now()
+# 上位層ではnumpyのdatetime64型で時刻が生成されるため、datetime64型で生成
+dt_now = datetime.datetime.now()
+date0 = np.datetime64(dt_now.strftime('%Y-%m-%dT%H:%M:%S'))
+date1 = np.datetime64(dt_now.strftime('%Y-%m-%dT%H:%M:%S'))
+date2 = np.datetime64(dt_now.strftime('%Y-%m-%dT%H:%M:%S'))
 task_id = ["task_id1", "task_id3", "task_id4"]
 submit_time = [date0, date1, date2]
 user_id = ["user_id", "user_id1", "user_id2"]
@@ -145,4 +157,3 @@ task_array = np.array(task_array)
 
 taskdata_gate(task_array)  # m1
 # taskdata_ask(user_id_ask)  # m2
-"""
