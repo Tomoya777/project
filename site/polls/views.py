@@ -44,5 +44,5 @@ class ScombLoginView(LoginView):
 class KadaiView(TemplateView):
     template_name = "kadai.html"
 
-class KadaiAddView(TemplateView):
+class KadaiaddView(TemplateView):
     template_name = "kadaiadd.html"

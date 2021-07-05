@@ -1,6 +1,7 @@
 @media screen and (min-width: 871px){
+    /*PC用の制御*/
     .logo-s{display: none;}/*スマートフォン用ヘッダーを削除*/
-    #nav{
+    .nav{
         position: fixed;
         width: 100%;
         font-weight: bold;
@@ -9,18 +10,18 @@
         padding-bottom: 5px;
         background: #585858;
     }
-    #mav ul{
+    .mav ul{
         width: 20px;
     }
-    #nav li{
+    .nav li{
         display: inline-block;
         padding: 15px;
     }
-    #nav a,p{
+    .nav a,p{
         text-decoration: none;
         color: #ffffff;
     }
-    #nav a:hover{
+    .nav a:hover{
         border-bottom: 5px solid #ffffff;
     }
 
@@ -52,18 +53,47 @@
         color: #000000;
         text-align: left;
     }
-    .home-contents{
-        overflow: hidden;
+    
+}
+.home-contents{
+    overflow: hidden;
+}
+.contents-explain{
+    float: left;
+    width: 50%;
+}
+.contents-calender{
+    float: right;
+    width: 40%;
+}
+@media screen and (max-width: 870px){
+    /*スマホ用の制御*/
+    body{
+        margin:0;
+        text-align: center;
     }
-    .contents-explain{
-        float: left;
-        margin-right: 20px;
-        padding: 20px;
-        width: 300px;
+    .nav{
+        border-top:8px solid #ffffff;
+        background: #585858;
     }
-    .contents-calender{
-        float: left;
-        padding: 20px;
-        width: 300px;
+    .nav ul{
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    .nav li{
+        border-bottom: 1px solid #ffffff;
+    }
+    .nav li a{
+        display: block;
+        width: 100%;
+        padding: 20px 0;
+        text-decoration: none;
+        text-align: center;
+        font-size: 14px;
+        color: #ffffff;
+    }
+    .nav li a:hover{
+        background: #634646;
     }
 }
