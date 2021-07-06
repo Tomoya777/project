@@ -157,13 +157,8 @@ def Scombkadai (driver,siteuser):
           task_array = np.append(task_array, task_temp, axis=0) #配列の末尾にこのfor文の中で取得した課題を追加
       
       usedsubjectname.append(correntsubjectname) #配列の末尾に今回の科目の名前を追加
-  driver.close() #ドライバーを停止 
-  task_array2=task_array
-  def kadai(task):
-    task_array2={'task':'kadai'}
-    return render(request,'kadai.html',task_array2)
+  driver.close() #ドライバーを停止
   return task_array
-
 class ScombLoginView(LoginView):
   def get(self, request, *args, **kwargs):
     context = {}

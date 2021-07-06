@@ -90,7 +90,7 @@ def taskdata_gate(task_array):
             # SELECT結果がNoneであればINSERT、重複していたらREPLACE
             if task_fetch == None:
                 # estimated_time(課題の推定時間)と、progress(課題の完成度)、remarks()備考欄は値が-1で生成されてしまうので、それぞれ初期値として60、0、nullを代入。
-                if task_array[i]['estimated_time'] == -1 and task_array[i]['progress'] == -1 and task_array[i]['remarks']:
+                if task_array[i]['estimated_time'] == -1 and task_array[i]['progress'] == -1:
                     task_array[i]['estimated_time'] = 60
                     task_array[i]['progress'] = 0
                 if not task_array[i]['remarks']:
@@ -163,7 +163,7 @@ def taskdata_ask(user_id_ask):  # user_idが配列になったことから競合
     else:  # 正常
         nagasa = len(result)  # fetchしてきた結果の長さ(taskの個数)を取得
         # 1を要素とする配列をtask_datatypeの型で生成
-        result_array = np.zeros(1, dtype=task_datatype)
+        result_array = np.zeros(nagasa, dtype=task_datatype)
         for i in range(nagasa):  # resultをndarray化したためタプルで渡せる
             result_array[i]['task_id'] = result[i, 0]
             result_array[i]['submit_time'] = result[i, 1]

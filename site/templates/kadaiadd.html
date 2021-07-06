@@ -45,18 +45,18 @@
             <p>Scomb以外で出された課題を入力して下さい。</p>
             <form method="POST" id="kadaiPost" action="ajax">
                 {% csrf_token %}
-                <p>科目名　：<input name="subject" id="subject_name" required></p>
+                <p>科目名　：<input name="subject" id="subject_name" value="{{subject_name}}"required></p>
                 <br>
-                <p>課題名　：<input name="" id="task_name" required></p>
+                <p>課題名　：<input name="task_name" id="task_name" value="{{task_name}}" required></p>
                 <br>
-                <p>期日　　：<input type="date" name="deadline" id="deadline_date" required><input type="time" name="deadline" id="deadline_time" required></p>
+                <p>期日　　：<input type="date" name="deadline" id="deadline_date" value="{{submit_time_date}}" required><input type="time" name="deadline" id="deadline_time" value="{{submit_time_time}}"required></p>
                 <br>
-                <p>進捗度　：<input name="progress" id="progress" required></p>
+                <p>進捗度　：<input name="progress" id="progress" value="{{progress}}"required></p>
                 <br>
-                <p>推定時間：<input name="estimated_time" id="estimated_time" required ></p>
+                <p>推定時間：<input name="estimated_time" id="estimated_time" value="{{estimated_time}}" required ></p>
                 <br>
                 <p>備考&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    ：<input name="remarks" id="remarks" required ></p>
+                    ：<input name="remarks" id="remarks" value="{{remraks}}" required ></p>
                 <br>
                     <label>
                         <input type="checkbox" name="is_submit" value="1" id="is_submit">提出済み
@@ -82,19 +82,18 @@
                 url:$('form#kadaiPost').attr('action'),
                 type: 'POST',
                 data:{
-                    'task_id':'',
+                    'task_id':"{{task_id}}",
                     'submit_time':$('#deadline_date').val() + "T" + $('#deadline_time').val(),
                     'user_id':'{{ user.username }}',
                     'subject_name':$('#subject_name').val(),
                     'task_name':$('#task_name').val(),
                     'is_submit':$('#is_submit').prop("checked"),
                     'can_submit':true,
-                    'submit_url':" ",
+                    'submit_url':"{{submit_url}}",
                     'estimated_time':$('#estimated_time').val(),
                     'progress':$('#progress').val(),
-                    'remarks':'test',
+                    'remarks':$('#remarks').val(),
                     'csrfmiddlewaretoken': '{{ csrf_token }}',
-                    'username': '{{ user.username }}'
                 },
                 dataType: 'text',
                 success: function(response){  // 通信成功

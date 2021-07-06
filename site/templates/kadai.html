@@ -38,17 +38,39 @@
         <p>提出課題一覧</p>
         <table>
             <tr>
-                <th>科目</th>
                 <th>課題名</th>
+                <th>科目</th>
                 <th>期日</th>
                 <th>進行度</th>
+                <th>推定時間</th>
+                <th>備考</th>
+                <th>課題の変更</th>
             </tr>
-            {% for item in data %}
+            {% for task in task_list %}
             <tr>
-                <th>{{item.subject}}</th>
-                <th>{{item.name}}</th>
-                <th>{{item.deadline}}</th>
-                <th>{{item.progress}}</th>
+                <th><a href="{{task.submit_url}}">{{task.task_name}}</a></th>
+                <th>{{task.subject_name}}</th>
+                <th>{{task.submit_time}}</th>
+                <th>{{task.progress}}%</th>
+                <th>{{task.estimated_time}}分</th>
+                <th>{{task.remarks}}</th>
+                <th>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="subject_name" value="{{task.subject_name}}">
+                        <input type="hidden" name="task_name" value="{{task.task_name}}">
+                        <input type="hidden" name="submit_time" value="{{task.submit_time}}">
+                        <input type="hidden" name="progress" value="{{task.progress}}">
+                        <input type="hidden" name="estimated_time" value="{{task.estimated_time}}">
+                        <input type="hidden" name="remarks" value="{{task.remarks}}">
+                        <input type="hidden" name="task_id" value="{{task.task_id}}">
+                        <input type="hidden" name="can_submit" value="{{task.can_submit}}">
+                        <input type="hidden" name="submit_url" value="{{task.submit_url}}">
+                        <button type="submit">
+                            編集する
+                        </button>
+                    </form>
+                </th>
             </tr>
             {% endfor %}
         </table>
