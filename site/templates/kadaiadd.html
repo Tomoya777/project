@@ -24,7 +24,7 @@
             </div>
             <ul id="main-menu">
                 <li><a href="{% url 'home' %}">トップページ</a></li>
-                <li><a href="{% url 'home' %}">課題一覧</a></li>
+                <li><a href="{% url 'kadai' %}">課題一覧</a></li>
                 <li>
                 {% if user.is_authenticated %}
                     <p>ユーザ名：{{ user.username }}さん</p>
