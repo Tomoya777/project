@@ -180,6 +180,13 @@ def kadaiaddajax(request):
     else:
         return HttpResponse(error_array)
 
+def kadaijax(request):
+    code,error_array = kadaiadd(request.POST)
+    if code == 0 :
+        return HttpResponse("ok")
+    else:
+        return HttpResponse(error_array)
+
 
 
 

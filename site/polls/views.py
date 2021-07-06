@@ -67,8 +67,11 @@ class KadaiView(TemplateView):
             'submit_url' : request.POST.get("submit_url"),
             'task_name' : request.POST.get("task_name"),
         }
-        return render(request, 'kadaiadd.html', context)
+        return render(request, 'kadaichange.html', context)
 
 
 class KadaiaddView(TemplateView):
     template_name = "kadaiadd.html"
+
+class KadaichangeView(TemplateView):
+    template_name = "kadaichange.html"
