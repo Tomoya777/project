@@ -5,7 +5,7 @@
 ***  File Name		: taskdatabase.py
 ***  Version		: V1.7
 ***  Designer		: 熊谷 直也
-***  Date			: 2021.07.05
+***  Date			: 2021.07.09
 ***  Purpose       	: データベース関連
 ***
 *** Revision :
@@ -239,7 +239,7 @@ task_array["estimated_time"] = -1
 task_array["progress"] = -1
 task_array["remarks"] = "hello"
 
-user_id_ask = "al19054"
+user_id_ask = "admin8"
 
 
 # taskdata_gate(task_array)  # m1
