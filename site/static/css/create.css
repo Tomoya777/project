@@ -1,4 +1,5 @@
-@media screen and (min-width: 871px){
+/*PC用css*/
+@media screen and (min-width: 951px){
     .create{
         width: 90%;
         margin-right: auto;
@@ -26,6 +27,34 @@
     .form2{
         width: auto;
         padding-right: 30%;
+    }
+    .form2 p{
+        text-align: right;
+    }
+}
+/*スマホ用css*/
+@media screen and (max-width: 950px){
+    .create{
+        width: 90%;
+        padding-top: 20px;
+        font-size: 2.5vh;
+        text-align: left;
+    }
+    .create a{
+        color: #0000ff;
+        text-decoration: none;
+    }
+    .form{
+        border: 2px solid #000000;
+        padding: 20px;
+        font-size: 3vw;
+        text-align: left;
+    }
+    .submit{
+        text-align: right;
+    }
+    .form2{
+        width: 90%;
     }
     .form2 p{
         text-align: right;

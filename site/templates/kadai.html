@@ -1,3 +1,13 @@
+<!--
+***  File Name: kadai.html
+***  Version	: V2.0
+***  Designer	: 内田友哉、加藤健太
+***  Date     : 2021/07/11
+***  Purpose  : 課題画面
+***
+***  Revision:
+*** 以前までの者をV1.0とし、今回からV2.0とする
+-->
 {% load static %}
 <!DOCTYPE html>
 <html>
@@ -5,57 +15,128 @@
     <meta charset="utf-8" />
     <title>芝浦課題管理システム</title>
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-
+    <!--css,javascriptリンク-->
 	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.18.1/build/cssreset/cssreset-min.css">
 	<link rel="stylesheet" href="{% static 'css/style.css' %}">
-	<link rel="stylesheet" href="{% static 'css/home.css' %}">
+	<link rel="stylesheet" href="{% static 'css/kadai.css' %}">
 </head>
 <body>
-    <div class="nav">
-        <div class="container">
-            <div class="container2">
-                <a href="{% url 'home' %}">芝浦課題管理システム</a>
-            </div>
-            <ul id="main-menu">
+    <!--スマホ用メニューバー-->
+    <div class="header-s">
+        <div class="menubar">
+            <a href="{% url 'home' %}"><b>芝浦課題管理システム</b></a>
+        </div>
+        <input type="checkbox" id="menu-btn-check">
+        <label for="menu-btn-check" class="menu-btn"><span></span></label>
+        <div class="menu-content">
+            <ul>
+                <font size="5" color="#ffffff">
+                    {% if user.is_authenticated %}
+                        <p>ユーザ名：{{ user.username }}さん</p>
+                    {% endif %}
+                </font>
                 <li><a href="{% url 'home' %}">トップページ</a></li>
+                <li><a href="{% url 'scomblogin' %}">Scombログイン</a></li>
                 <li><a href="{% url 'kadai' %}">課題一覧</a></li>
-                <li>
-                {% if user.is_authenticated %}
-                    <p>ユーザ名：{{ user.username }}さん</p>
-                    <p><a href="{% url 'logout' %}">ログアウト</a></p>
-                {% else %}
-                    <br>
-                    <p><a href="{% url 'login' %}">ログイン</a></p>
-                {% endif %}
-                </li>
+                <li><a href="{% url 'kadai' %}">課題の追加</a></li>
+                <li><a href="{% url 'logout' %}">ログアウト</a></li>
             </ul>
         </div>
     </div>
-    <br><br><br><br><br><br>
-
-    <div class="home">
+    <!--PC用メニューバー-->
+    <div class="header-pc">
+        <div class="nav">
+            <div class="container">
+                <div class="container2">
+                    <a href="{% url 'home' %}">芝浦課題管理システム</a>
+                </div>
+                <ul class="main-menu">
+                    <li><a href="{% url 'home' %}">トップページ</a></li>
+                    <li><a href="{% url 'kadai' %}">課題一覧</a></li>
+                    <li>
+                    {% if user.is_authenticated %}
+                        <p>ユーザ名：{{ user.username }}さん</p>
+                        <p><a href="{% url 'logout' %}">ログアウト</a></p>
+                    {% else %}
+                        <br>
+                        <p><a href="{% url 'login' %}">ログイン</a></p>
+                    {% endif %}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <br><br><br><br><br><br>
+        <!--mainの内容-->
+        <center>
+        <div class="kadai">
+            {% if user.is_authenticated %}
+            <p>提出課題一覧</p>
+            <table>
+                <tr>
+                    <th>課題名</th>
+                    <th>科目</th>
+                    <th>期日</th>
+                    <th>進行度</th>
+                    <th>推定時間</th>
+                    <th>備考</th>
+                    <th>課題の変更</th>
+                </tr>
+                {% for task in task_list %}
+                <tr>
+                    <th><a href="{{task.submit_url}}">{{task.task_name}}</a></th>
+                    <th>{{task.subject_name}}</th>
+                    <th>{{task.submit_time}}</th>
+                    <th>{{task.progress}}%</th>
+                    <th>{{task.estimated_time}}分</th>
+                    <th>{{task.remarks}}</th>
+                    <th>
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="subject_name" value="{{task.subject_name}}">
+                            <input type="hidden" name="task_name" value="{{task.task_name}}">
+                            <input type="hidden" name="submit_time" value="{{task.submit_time}}">
+                            <input type="hidden" name="progress" value="{{task.progress}}">
+                            <input type="hidden" name="estimated_time" value="{{task.estimated_time}}">
+                            <input type="hidden" name="remarks" value="{{task.remarks}}">
+                            <input type="hidden" name="task_id" value="{{task.task_id}}">
+                            <input type="hidden" name="can_submit" value="{{task.can_submit}}">
+                            <input type="hidden" name="submit_url" value="{{task.submit_url}}">
+                            <button type="submit">
+                                編集する
+                            </button>
+                        </form>
+                    </th>
+                </tr>
+                {% endfor %}
+            </table>
+            <br>
+            <p><a href="{% url 'kadaiadd' %}">課題を追加する</a></p>
+            <br><br>
+            {% else %}
+            <p>このサイトへのセッションが切れているか、ログインが完了していません。<br>
+                お手数ですが、<a href="{% url 'login' %}"><b>こちら</b></a>からログインを行ってください。
+            </p>
+            {% endif %}
+        </div>
+    </div>
+    </center>
+    <center>
+    <div class="kadai-s">
         {% if user.is_authenticated %}
-        <p>提出課題一覧</p>
-        <table>
-            <tr>
-                <th>課題名</th>
-                <th>科目</th>
-                <th>期日</th>
-                <th>進行度</th>
-                <th>推定時間</th>
-                <th>備考</th>
-                <th>課題の変更</th>
-            </tr>
-            {% for task in task_list %}
-            <tr>
-                <th><a href="{{task.submit_url}}">{{task.task_name}}</a></th>
-                <th>{{task.subject_name}}</th>
-                <th>{{task.submit_time}}</th>
-                <th>{{task.progress}}%</th>
-                <th>{{task.estimated_time}}分</th>
-                <th>{{task.remarks}}</th>
-                <th>
-                    <form action="" method="post">
+            <p>提出課題一覧</p>
+            <p><font color="#ff0000"><b>※</b></font>詳細を確認したい場合は、パソコンで観覧するか編集ボタンを押して確認してください。</p>
+            <table>
+                <tr>
+                    <th>課題名</th>
+                    <th>期日</th>
+                    <th>編集</th>
+                </tr>
+                {% for task in task_list %}
+                <tr>
+                    <th><a href="{{task.submit_url}}">{{task.task_name}}</a></th>
+                    <th>{{task.submit_time}}</th>
+                    <th>
+                        <form action="" method="post">
                         {% csrf_token %}
                         <input type="hidden" name="subject_name" value="{{task.subject_name}}">
                         <input type="hidden" name="task_name" value="{{task.task_name}}">
@@ -66,29 +147,20 @@
                         <input type="hidden" name="task_id" value="{{task.task_id}}">
                         <input type="hidden" name="can_submit" value="{{task.can_submit}}">
                         <input type="hidden" name="submit_url" value="{{task.submit_url}}">
-                        <button type="submit">
-                            編集する
-                        </button>
-                    </form>
-                </th>
-            </tr>
-            {% endfor %}
-        </table>
-            <p>{{task}}</p>
-        <br>
-        <p><a href="{% url 'kadaiadd' %}">課題を追加する</a></p>
-                        <!--やること 
-                ・カレンダーの追加
-                    -現在抱えている課題に応じて色を付けたいので，<input="date">では不十分?
-                ・期限の近い課題を表示
-            -->
-            
-        
-        {% else %}
-        <p>このサイトへのセッションが切れているか、ログインが完了していません。<br>
-            お手数ですが、<a href="{% url 'login' %}"><b>こちら</b></a>からログインを行ってください。
-        </p>
-        {% endif %}
+                        <button type="submit">編集</button>
+                    </th>
+                </tr>
+                {% endfor %}
+            </table>
+            <br>
+            <p><a href="{% url 'kadaiadd' %}"><b>課題を追加する</b></a></p>
+            <br><br>
+            {% else %}
+            <p>このサイトへのセッションが切れているか、ログインが完了していません。<br>
+                お手数ですが、<a href="{% url 'login' %}"><b>こちら</b></a>からログインを行ってください。
+            </p>
+            {% endif %}
     </div>
+    </center>
 </body>
 </html>
