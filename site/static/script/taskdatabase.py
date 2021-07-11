@@ -3,9 +3,9 @@
 
 """
 ***  File Name		: taskdatabase.py
-***  Version		: V1.6
+***  Version		: V1.7
 ***  Designer		: 熊谷 直也
-***  Date			: 2021.07.05
+***  Date			: 2021.07.09
 ***  Purpose       	: データベース関連
 ***
 *** Revision :
@@ -14,6 +14,7 @@
 *** V1.4 : 熊谷 直也, 2021.07.05 配列→構造体
 *** V1.5 : 熊谷 直也, 2021.07.05 備考欄の初期値処理の追加
 *** V1.6 : 熊谷 直也, 2021.07.05 taskdata_askの返り値を構造体化
+*** V1.7 : 熊谷 直也, 2021.07.09 SELECT文にソートを追加
 
 """
 
@@ -22,7 +23,7 @@ import sqlite3
 import numpy as np
 import datetime
 
-from django.views.generic import TemplateView,CreateView 
+from django.views.generic import TemplateView, CreateView
 
 task_datatype = [
     ("task_id", "U32"),  # 課題のid. scombからの読み取り時は"idnumber+固有id"とする.
@@ -150,7 +151,7 @@ def taskdata_gate(task_array):
 def taskdata_ask(user_id_ask):  # user_idが配列になったことから競合を避けるためuser_id→user_id_askとしました。
     conn = sqlite3.connect(dbname)  # データベース接続
     cur = conn.cursor()  # cursorで一件ずつ取得
-    cur.execute("SELECT * FROM taskdata WHERE user_id = ?",
+    cur.execute("SELECT * FROM taskdata WHERE user_id = ? ORDER BY submit_time;",
                 [user_id_ask])  # user_id_askと一致するuser_idの課題データを取得
     result = cur.fetchall()  # SELECT文の結果をすべて取得
     result = np.array(result)  # タプルで値を渡すためresultをndarray化
@@ -186,10 +187,10 @@ def taskdata_ask(user_id_ask):  # user_idが配列になったことから競合
             else:
                 result_array[i]['remarks'] = result[i, 10]
 
-            # print(result_array)
+        # print(result_array)
         cur.close()  # カーソルクローズ
         conn.close()  # データベース接続終了
-        
+
         return 0, result_array  # 返り値が0で処理正常 resultを構造体に
 
 
@@ -222,7 +223,8 @@ task_array = [task_id, submit_time, user_id,  subject_name, task_name,
               is_submit, can_submit, submit_url, estimated_time, progless, remarks]
 task_array = np.array(task_array)"""
 
-"""# 配列の中に構造体を入れてやり直し
+"""
+# 配列の中に構造体を入れてやり直し
 task_array = np.zeros(1, dtype=task_datatype)  # 1を要素とする配列をtask_datatypeの型で生成
 dt_now = datetime.datetime.now()
 date0 = np.datetime64(dt_now.strftime('%Y-%m-%dT%H:%M:%S'))
