@@ -1,3 +1,13 @@
+<!--
+***  File Name: home.html
+***  Version	: V2.0
+***  Designer	: 内田友哉、國丸裕太
+***  Date     : 2021/07/11
+***  Purpose  : トップページ画面
+***
+***  Revision:
+*** 以前までの者をV1.0とし、今回からV2.0とする
+-->
 {% load static %}
 <!DOCTYPE html>
 <html>
@@ -6,7 +16,7 @@
     <meta charset="utf-8" />
     <title>芝浦課題管理システム</title>
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-
+    <!--css,javascriptリンク-->
     <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.18.1/build/cssreset/cssreset-min.css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
@@ -14,27 +24,54 @@
 </head>
 
 <body>
-    <div class="nav">
-        <div class="container">
-            <div class="container2">
-                <a href="{% url 'home' %}">芝浦課題管理システム</a>
-            </div>
-            <ul id="main-menu">
-                <li><a href="{% url 'home' %}">トップページ</a></li>
-                <li><a href="{% url 'kadai' %}">課題一覧</a></li>
-                <li>
+    <!--スマホ用メニューバー-->
+    <div class="header-s">
+        <div class="menubar">
+            <a href="{% url 'home' %}"><b>芝浦課題管理システム</b></a>
+        </div>
+        <input type="checkbox" id="menu-btn-check">
+        <label for="menu-btn-check" class="menu-btn"><span></span></label>
+        <div class="menu-content">
+            <ul>
+                <font size="5" color="#ffffff">
                     {% if user.is_authenticated %}
-                    <p>ユーザ名：{{ user.username }}さん</p>
-                    <p><a href="{% url 'logout' %}">ログアウト</a></p>
-                    {% else %}
-                    <br>
-                    <p><a href="{% url 'login' %}">ログイン</a></p>
+                        <p>ユーザ名：{{ user.username }}さん</p>
                     {% endif %}
-                </li>
+                </font>
+                <li><a href="{% url 'home' %}">トップページ</a></li>
+                <li><a href="{% url 'scomblogin' %}">Scombログイン</a></li>
+                <li><a href="{% url 'kadai' %}">課題一覧</a></li>
+                <li><a href="{% url 'kadai' %}">課題の追加</a></li>
+                <li><a href="{% url 'logout' %}">ログアウト</a></li>
             </ul>
         </div>
     </div>
+    <!--PC用メニューバー-->
+    <div class="header-pc">
+        <div class="nav">
+            <div class="container">
+                <div class="container2">
+                    <a href="{% url 'home' %}">芝浦課題管理システム</a>
+                </div>
+                <ul class="main-menu">
+                    <li><a href="{% url 'home' %}">トップページ</a></li>
+                    <li><a href="{% url 'kadai' %}">課題一覧</a></li>
+                    <li>
+                        {% if user.is_authenticated %}
+                        <p>ユーザ名：{{ user.username }}さん</p>
+                        <p><a href="{% url 'logout' %}">ログアウト</a></p>
+                        {% else %}
+                        <br>
+                        <p><a href="{% url 'login' %}">ログイン</a></p>
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+        </div>
     <br><br><br><br><br><br>
+    </div>
+    <!--mainの内容-->
+    <center>
     <main>
         <div class="home">
             <div class="home-contents">
@@ -45,26 +82,22 @@
                         芝浦工業大学在学中の学生を対象とした、課題を管理するためのWebアプリケーションです。<br>
                         次にScombから課題を抽出するため、<a href="{% url 'scomblogin' %}"><b>こちら</b></a>からScombにログインしてください。<br>
                     </p><br>
-                    <p>直近の提出課題</p>
+                    <p>提出課題一覧:直近の課題</p>
                     <table>
                         <tr>
-                            <th>科目</th>
                             <th>課題名</th>
                             <th>期日</th>
-                            <th>進行度</th>
                         </tr>
-                        {% for item in data %}
+                        {% for task in task_list|slice:":5"%}
                         <tr>
-                            <th>{{item.subject}}</th>
-                            <th>{{item.name}}</th>
-                            <th>{{item.data}}</th>
-                            <th>{{item.degree}}</th>
+                            <th><a href="{{task.submit_url}}">{{task.task_name}}</a></th>
+                            <th>{{task.submit_time}}</th>
                         </tr>
                         {% endfor %}
                     </table>
                     <br>
-                    <p><a href="{% url 'kadai' %}">課題一覧へ</a></p>
-                    <p><a href="{% url 'kadaiadd' %}">課題を追加する</a></p>
+                    <p><a href="{% url 'kadai' %}"><b>すべての課題を表示する</b></a></p>
+                    <p><a href="{% url 'kadaiadd' %}"><b>課題を追加する</b></a></p>
 
                     </p>
                     {% else %}
@@ -73,6 +106,7 @@
                     </p>
                     {% endif %}
                 </div>
+                <!--カレンダー-->
                 <div class="contents-calender">
                     <div id="caleandar"></div>
                 </div>

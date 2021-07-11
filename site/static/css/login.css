@@ -1,4 +1,15 @@
-@media screen and (min-width: 871px){
+/*
+***  File Name: login.css
+***  Version	: V2.0
+***  Designer	: 内田友哉
+***  Date     : 2021/07/11
+***  Purpose  : loginフォームがあるページのcss
+***
+***  Revision:
+*** 以前までの者をV1.0とし、今回からV2.0とする
+*/
+/*PC用css*/
+@media screen and (min-width: 951px){
     .login{
         width: 90%;
         margin-right: auto;
@@ -19,6 +30,28 @@
     }
     .login a:hover{
         color: #ff0000;
+    }
+    .submit{
+        text-align: right;
+    }
+}
+/*スマホ用css*/
+@media screen and (max-width: 950px){
+    .login{
+        width: 90%;
+        padding-top: 20px;
+        font-size: 2.5vh;
+        text-align: left;
+    }
+    .login a{
+        color: #0000ff;
+        text-decoration: none;
+    }
+    .form{
+        border: 2px solid #000000;
+        padding: 20px;
+        font-size: 3.5vw;
+        text-align: left;
     }
     .submit{
         text-align: right;

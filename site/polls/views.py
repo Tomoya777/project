@@ -19,7 +19,26 @@ class MyLogoutView(LoginRequiredMixin, LogoutView):
     template_name = "logout.html"
 
 class HomeView(TemplateView):
-    template_name = "home.html"
+    def get(self, request, *args, **kwargs):
+        code ,task_list = taskdata_ask(str(self.request.user))
+        task_list_export = []
+        for task_temp in task_list:
+            if (bool(task_temp["can_submit"])) == True:
+                task_list_export.append(task_temp)
+        context = {
+            'task_list': task_list_export,
+        }
+        return render(request, 'home.html', context)
+    def post (self, request, *args, **kwargs):
+        print(request.POST.get("task_value"))
+        context = {
+            'submit_time_date' : request.POST.get("submit_time")[:10],
+            'submit_time_time' : request.POST.get("submit_time")[11:16],
+            'submit_url' : request.POST.get("submit_url"),
+            'task_name' : request.POST.get("task_name"),
+        }
+        return render(request, 'home.html', context)
+
 
 class UserCreateView(CreateView):
     form_class = forms.UserCreationForm

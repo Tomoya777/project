@@ -1,4 +1,15 @@
-@media screen and (min-width: 871px){
+/*
+***  File Name: home.css
+***  Version	: V2.0
+***  Designer	: 内田友哉
+***  Date     : 2021/07/11
+***  Purpose  : mainとhomeのcss
+***
+***  Revision:
+*** 以前までの者をV1.0とし、今回からV2.0とする
+*/
+/*PC用css*/
+@media screen and (min-width: 951px) {
     .home{
         width: 90%;
         margin-right: auto;
@@ -20,5 +31,47 @@
         padding: 5px;
         font-size: 20px;
         border: 1px solid #000000;
+    }
+    .contents-explain table{
+        width: 100%;
+    }
+    .home-contents{
+        overflow: hidden;
+    }
+    .contents-explain{
+        float: left;
+        width: 50%;
+    }
+    .contents-calender{
+        float: right;
+        width: 40%;
+    }
+}
+/*スマホ用css*/
+@media screen and (max-width: 950px) {
+    .home{
+        width: 90%;
+        text-align: left;
+        font-size: 2.5vh;
+        padding-top: 20px;
+    }
+    .home a{
+        color: #0000ff;
+        text-decoration: none;
+    }
+    .contents-explain table{
+        width: 100%;
+    }
+    .home-contents{
+        overflow: hidden;
+    }
+    th{
+        width: 150px;
+        padding: 5px;
+        font-size: 20px;
+        border: 1px solid #000000;
+    }
+    .contents-calender{
+        border: 2px solid #585858;
     }
 }
