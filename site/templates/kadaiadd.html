@@ -1,3 +1,13 @@
+<!--
+***  File Name: kadaiadd.html
+***  Version	: V2.0
+***  Designer	: 内田友哉、加藤健太
+***  Date     : 2021/07/11
+***  Purpose  : 課題追加画面
+***
+***  Revision:
+*** 以前までの者をV1.0とし、今回からV2.0とする
+-->
 {% load static %}
 <!DOCTYPE html>
 <html>
@@ -5,7 +15,7 @@
     <meta charset="utf-8" />
     <title>芝浦課題管理システム</title>
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-
+    <!--css,javascriptリンク-->
 	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.18.1/build/cssreset/cssreset-min.css">
 	<link rel="stylesheet" href="{% static 'css/style.css' %}">
 	<link rel="stylesheet" href="{% static 'css/home.css' %}">
@@ -17,28 +27,54 @@
 
 </head>
 <body>
-    <div class="nav">
-        <div class="container">
-            <div class="container2">
-                <a href="{% url 'home' %}">芝浦課題管理システム</a>
-            </div>
-            <ul id="main-menu">
+    <!--スマホ用メニューバー-->
+    <div class="header-s">
+        <div class="menubar">
+            <a href="{% url 'home' %}"><b>芝浦課題管理システム</b></a>
+        </div>
+        <input type="checkbox" id="menu-btn-check">
+        <label for="menu-btn-check" class="menu-btn"><span></span></label>
+        <div class="menu-content">
+            <ul>
+                <font size="5" color="#ffffff">
+                    {% if user.is_authenticated %}
+                        <p>ユーザ名：{{ user.username }}さん</p>
+                    {% endif %}
+                </font>
                 <li><a href="{% url 'home' %}">トップページ</a></li>
+                <li><a href="{% url 'scomblogin' %}">Scombログイン</a></li>
                 <li><a href="{% url 'kadai' %}">課題一覧</a></li>
-                <li>
-                {% if user.is_authenticated %}
-                    <p>ユーザ名：{{ user.username }}さん</p>
-                    <p><a href="{% url 'logout' %}">ログアウト</a></p>
-                {% else %}
-                    <br>
-                    <p><a href="{% url 'login' %}">ログイン</a></p>
-                {% endif %}
-                </li>
+                <li><a href="{% url 'kadai' %}">課題の追加</a></li>
+                <li><a href="{% url 'logout' %}">ログアウト</a></li>
             </ul>
         </div>
     </div>
+    <!--PC用メニューバー-->
+    <div class="header-pc">
+        <div class="nav">
+            <div class="container">
+                <div class="container2">
+                    <a href="{% url 'home' %}">芝浦課題管理システム</a>
+                </div>
+                <ul class="main-menu">
+                    <li><a href="{% url 'home' %}">トップページ</a></li>
+                    <li><a href="{% url 'kadai' %}">課題一覧</a></li>
+                    <li>
+                        {% if user.is_authenticated %}
+                        <p>ユーザ名：{{ user.username }}さん</p>
+                        <p><a href="{% url 'logout' %}">ログアウト</a></p>
+                        {% else %}
+                        <br>
+                        <p><a href="{% url 'login' %}">ログイン</a></p>
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+        </div>
     <br><br><br><br><br><br>
-
+    </div>
+    <!--mainの内容-->
+    <center>
     <div class="home">
         <div class="form">
             {% if user.is_authenticated%}
@@ -67,13 +103,15 @@
             </form>
         </div>
         <br>
-        <p><a href="{% url 'home' %}">トップページへ戻る</a></p>
+        <p><a href="{% url 'home' %}"><b>課題一覧へ戻る</b></a></p>
+        <p><a href="{% url 'home' %}"><b>トップページへ戻る</b></a></p>
         {% else %}
             <p>このサイトへのセッションが切れているか、ログインが完了していません。<br>
                 お手数ですが、<a href="{% url 'login' %}"><b>こちら</b></a>からログインを行ってください。
             </p>
         {% endif %}
     </div>
+    </center>
 </body>
     <script>
         $('#kadaiPost').submit(function() {  //ボタンクリックを起点にしてajax
