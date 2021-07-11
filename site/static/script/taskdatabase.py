@@ -222,6 +222,7 @@ user_id_ask = "user_id"
 task_array = [task_id, submit_time, user_id,  subject_name, task_name,
               is_submit, can_submit, submit_url, estimated_time, progless, remarks]
 task_array = np.array(task_array)"""
+
 """
 # 配列の中に構造体を入れてやり直し
 task_array = np.zeros(1, dtype=task_datatype)  # 1を要素とする配列をtask_datatypeの型で生成
