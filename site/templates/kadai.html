@@ -81,11 +81,11 @@
                     <th>備考</th>
                     <th>課題の変更</th>
                 </tr>
-                {% for task in task_list %}
+                {% for task, true_date in task_list %}
                 <tr>
                     <th><a href="{{task.submit_url}}">{{task.task_name}}</a></th>
                     <th>{{task.subject_name}}</th>
-                    <th>{{task.submit_time}}</th>
+                    <th>{{true_date}}</th>
                     <th>{{task.progress}}%</th>
                     <th>{{task.estimated_time}}分</th>
                     <th>{{task.remarks}}</th>
@@ -131,10 +131,10 @@
                     <th>期日</th>
                     <th>編集</th>
                 </tr>
-                {% for task in task_list %}
+                {% for task, true_date in task_list %}
                 <tr>
                     <th><a href="{{task.submit_url}}">{{task.task_name}}</a></th>
-                    <th>{{task.submit_time}}</th>
+                    <th>{{true_date}}</th>
                     <th>
                         <form action="" method="post">
                         {% csrf_token %}

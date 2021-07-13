@@ -88,10 +88,10 @@
                             <th>課題名</th>
                             <th>期日</th>
                         </tr>
-                        {% for task in task_list|slice:":5"%}
+                        {% for task ,true_date in task_list|slice:":5"%}
                         <tr>
                             <th><a href="{{task.submit_url}}">{{task.task_name}}</a></th>
-                            <th>{{task.submit_time}}</th>
+                            <th>{{true_date}}</th>
                         </tr>
                         {% endfor %}
                     </table>
