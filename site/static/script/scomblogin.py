@@ -7,6 +7,7 @@
 ***
 ***  Revision:
 *** V1.0 : 加藤健太, 2021.07.03
+*** V1.1 : 加藤健太, 2021.07.13 ログイン方法の最適化
 '''
 import time
 import numpy as np
@@ -43,12 +44,15 @@ def Scomblogin (USER, PASSW):
 
   options = webdriver.ChromeOptions() #optionの取得
   options.add_argument('--disable-extensions')  #拡張機能を無効化
-  options.add_experimental_option( "prefs", {'profile.managed_default_content_settings.images': 2}) #軽量化のため画像を読み込ませない
   options.add_experimental_option("excludeSwitches", ["enable-logging"]) #不要なエラーの表示削除
-  # options.add_argument('--headless') #ブラウザ画面の非表示
+  options.add_argument('--headless') #ブラウザ画面の非表示
+  options.add_argument('--blink-settings=imagesEnabled=false') #軽量化のため画像を読み込ませない
+  options.add_argument('--disable-gpu') #必須
+  options.add_argument('--no-sandbox') #google-chrome-stableを実行するために必須
+  options.add_argument('--lang=ja') #言語の日本語指定
 
   driver = webdriver.Chrome(options=options) #chromeドライバの起動
-  driver.get('https://al19063:sibaura_p00p@scomb.shibaura-it.ac.jp/portal/dologin?initialURI=') #scormへと接続
+  driver.get('https://scomb.shibaura-it.ac.jp/portal/dologin?initialURI=') #scormへと接続
 
   # タイムアウト時間を設定
   wait = WebDriverWait(driver, TIME_OUT)
@@ -57,6 +61,7 @@ def Scomblogin (USER, PASSW):
   low_url = driver.current_url #遷移後urlの取得
   login_url =  low_url[:8] +  USER + ":" + PASSW +"@" + low_url[8:] #パスワードを付与したurlを取得
   driver.get(login_url) #ログイン
+
   try :
     wait.until(expected_conditions.element_to_be_clickable((By.XPATH, "//input[@type='submit']"))) #ログインボタンが押せるまで待機
   except TimeoutException:
@@ -144,7 +149,7 @@ def Scombkadai (driver,siteuser):
           task_temp["submit_url"] = submit_url #構造体に保存
           low_taskid = urllib.parse.parse_qsl(urllib.parse.urlparse(submit_url).query) #urlを分解し,含まれるパラメーターを抽出
           task_temp["task_id"] = siteuser + low_taskid[0][1] + low_taskid[3][1] #得られたパラメーターからidを生成し,保存
-          task_temp["submit_time"] = count.find_all("td")[2].text.replace("/","-") + "T23:59:59" #提出時間を読み取り保存
+          task_temp["submit_time"] = count.find_all("td")[2].text.replace("/","-") + "T23:59:00" #提出時間を読み取り保存
           task_temp["user_id"] = siteuser #user_idを保存
           task_temp["subject_name"] = correntsubjectname #科目名を保存
           task_temp["task_name"] = count.find("span", class_="instancename").text #課題名を保存
