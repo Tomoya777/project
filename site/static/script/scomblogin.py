@@ -109,10 +109,10 @@ def Scombkadai (driver,siteuser):
           task_temp["user_id"] = siteuser #user_idを保存
           task_temp["subject_name"] = correntsubjectname #科目名を保存
           task_temp["task_name"] = count.find("span", class_="instancename").text #課題名を保存
-          if count.find_all("td", class_ ="last")[1].span != None: #提出ボタンが存在しなければ
-            task_temp["can_submit"] = 1 #提出可能ではない
-          if count.find("span", class_ ="unsubmitted") != None: #提出されていないことを確認したら
-            task_temp["is_submit"] = 1 #値を代入
+          if count.find_all("td", class_ ="last")[1].span != None: #提出ボタンが存在すれば
+            task_temp["can_submit"] = 1 #提出可能
+          if count.find("span", class_ ="unsubmitted") == None: #提出されていたなら
+            task_temp["is_submit"] = 1 #提出済み
           task_temp["estimated_time"] = -1
           task_temp["progress"] = -1
           task_array = np.append(task_array, task_temp, axis=0) #配列の末尾にこのfor文の中で取得した課題を追加
@@ -131,10 +131,10 @@ def Scombkadai (driver,siteuser):
           task_temp["user_id"] = siteuser #user_idを保存
           task_temp["subject_name"] = correntsubjectname #科目名を保存
           task_temp["task_name"] = count.find("span", class_="instancename").text #課題名を保存
-          if count.find_all("td")[3].span != None: #提出ボタンが存在しなければ
-            task_temp["can_submit"] = 1 #提出可能ではない
-          if count.find("span", class_ ="unsubmitted") != None: #提出されていないことを確認したら
-            task_temp["is_submit"] = 1 #値を代入
+          if count.find_all("td")[3].span != None: #提出ボタンが存在すれば
+            task_temp["can_submit"] = 1 #提出可能
+            if count.find_all("td")[3].span.text == "再受験": #提出されていたなら
+              task_temp["is_submit"] = 1 #提出済み
           task_temp["estimated_time"] = -1
           task_temp["progress"] = -1
           task_array = np.append(task_array, task_temp, axis=0) #配列の末尾にこのfor文の中で取得した課題を追加
@@ -153,10 +153,10 @@ def Scombkadai (driver,siteuser):
           task_temp["user_id"] = siteuser #user_idを保存
           task_temp["subject_name"] = correntsubjectname #科目名を保存
           task_temp["task_name"] = count.find("span", class_="instancename").text #課題名を保存
-          if count.find_all("td")[3].span != None: #提出ボタンが存在しなければ
-            task_temp["can_submit"] = 1 #提出可能ではない
-          if count.find("span", class_ ="unsubmitted") != None: #提出されていないことを確認したら
-            task_temp["is_submit"] = 1 #値を代入
+          if count.find_all("td")[3].span != None: #提出ボタンが存在すれば
+            task_temp["can_submit"] = 1 #提出可能
+          if count.find("span", class_ ="unsubmitted") == None: #提出されていれば
+            task_temp["is_submit"] = 1 #提出済み
           task_temp["estimated_time"] = -1
           task_temp["progress"] = -1
           task_array = np.append(task_array, task_temp, axis=0) #配列の末尾にこのfor文の中で取得した課題を追加

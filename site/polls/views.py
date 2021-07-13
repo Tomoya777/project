@@ -22,9 +22,9 @@ class HomeView(TemplateView):
     def get(self, request, *args, **kwargs):
         code ,task_list = taskdata_ask(str(self.request.user))
         task_list_export = []
-        for task_temp in task_list:
-            if (bool(task_temp["can_submit"])) == True:
-                task_list_export.append(task_temp)
+        for low_task in task_list:
+            if (((bool(low_task["can_submit"])) == True) and ((bool(low_task["is_submit"])) == False)):
+                task_list_export.append((low_task,(str(low_task["submit_time"]))[:16].replace("T"," ")))
         context = {
             'task_list': task_list_export,
         }
@@ -65,9 +65,9 @@ class KadaiView(TemplateView):
     def get(self, request, *args, **kwargs):
         code ,task_list = taskdata_ask(str(self.request.user))
         task_list_export = []
-        for task_temp in task_list:
-            if (bool(task_temp["can_submit"])) == True:
-                task_list_export.append(task_temp)
+        for low_task in task_list:
+            if (((bool(low_task["can_submit"])) == True) and ((bool(low_task["is_submit"])) == False)):
+                task_list_export.append((low_task,(str(low_task["submit_time"]))[:16].replace("T"," ")))
         context = {
             'task_list': task_list_export,
         }

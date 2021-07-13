@@ -107,7 +107,7 @@
                     <br>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" id="scorm_windowbuttonok" data-dismiss="modal" data-toggle="modal">OK</button>
+                    <button type="button" class="btn btn-secondary" id="scorm_windowbuttonok" data-dismiss="modal" data-toggle="modal"　onclick="">OK</button>
                   </div>
                 <div class="modal-body text-left" id="modalHtml"></div>
             </div>
@@ -142,6 +142,7 @@
                     else {
                         $('#scorm_windowtitle').text('課題抽出完了!');
                         $('#scorm_windowprogress').text('課題の読み込みが完了しました。');
+                        $('#scorm_windowbuttonok').attr("onclick","location.href='{% url 'kadai' %}'");
                         $("#scorm_windowbuttonok").modal("show");
 
                     }
