@@ -87,9 +87,9 @@
                 <br>
                 <p>期日　　：<input type="date" name="deadline" id="deadline_date" value="{{submit_time_date}}" required><input type="time" name="deadline" id="deadline_time" value="{{submit_time_time}}"required></p>
                 <br>
-                <p>進捗度　：<input name="progress" id="progress" value="{{progress}}"required></p>
+                <p>進捗度　：<input type="number" step="1" max="100" min = "0" name="progress" id="progress" value="{{progress}}"required></p>
                 <br>
-                <p>推定時間：<input name="estimated_time" id="estimated_time" value="{{estimated_time}}" required ></p>
+                <p>推定時間：<input type="number" step="1" min = "0" name="estimated_time" id="estimated_time" value="{{estimated_time}}" required ></p>
                 <br>
                 <p>備考&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     ：<input name="remarks" id="remarks" value="{{remraks}}"></p>
@@ -132,6 +132,7 @@
     </div>
 </body>
     <script>
+        document.getElementById('scorm_windowbuttonok').style.display='none';
         $('#kadaiPost').submit(function() {  //ボタンクリックを起点にしてajax
             event.preventDefault();
             $.ajax({
@@ -160,7 +161,10 @@
                         $("#modal01").modal("show");
                         $("#scorm_windowbuttonok").modal("show");
                     }else{
-                        alert(response)
+                        $('#scorm_windowtitle').text('エラー');
+                        $('#scorm_windowprogress').text(response);
+                        $("#modal01").modal("show");
+                        $("#scorm_windowbuttonok").modal("show");
                     }
                     //test
                 },

@@ -87,9 +87,9 @@
                 <br>
                 <p>期日　　：<input type="date" name="deadline" id="deadline_date" value="{{submit_time_date}}" required><input type="time" name="deadline" id="deadline_time" value="{{submit_time_time}}"required></p>
                 <br>
-                <p>進捗度　：<input name="progress" id="progress" value="{{progress}}"required></p>
+                <p>進捗度　：<input type="number" step="1" max="100" min = "0" name="progress" id="progress" value="{{progress}}"required></p>
                 <br>
-                <p>推定時間：<input name="estimated_time" id="estimated_time" value="{{estimated_time}}" required ></p>
+                <p>推定時間：<input name="estimated_time" type="number" step="1" min = "0" id="estimated_time" value="{{estimated_time}}" required ></p>
                 <br>
                 <p>備考&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     ：<input name="remarks" id="remarks" value="{{remraks}}"></p>
@@ -110,7 +110,7 @@
                 お手数ですが、<a href="{% url 'login' %}"><b>こちら</b></a>からログインを行ってください。
             </p>
         {% endif %}
-    </div>>
+    </div>
     <div class="modal fade" id="modal01" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
