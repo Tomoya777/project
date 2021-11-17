@@ -4,3 +4,4 @@ Djangoのスーパーアカウント並びにメールアドレス<br>
 以下はgoogleアカウント<br>
 メールアドレス：kodozyouhou1b8@gmail.com<br>
 パスワード：kodo1b-8 
+"# bbc" 
